@@ -13,20 +13,22 @@ jobs:
     
     - name: Checkout
       uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
       
-    - name: Commit to branch
+    - name: Determine latest tag
+      id: get-tag
       run: |
         # Get new tags
         git fetch --tags
 
         # Determine latest tag name
-        latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
-
+        echo "Using tag $latestTag"
+        echo "::set-output name=latestTag::$latestTag"
+    
+    - name: Update branch content
+      run: |
         # Checkout replace the `latest` branch with content from latest tag
-        git branch -D latest &>/dev/null 
-        git checkout -b latest $latestTag
+        # git branch -D latest &>/dev/null
+        git checkout -b latest ${{ steps.get-tag.outputs.latestTag }} 
         
     - name: Push changes
       uses: ad-m/github-push-action@master
