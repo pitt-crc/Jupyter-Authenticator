@@ -28,24 +28,17 @@ that have been properly authenticated.
 Installation
 ------------
 
-This package can be installed with `pip` either from a local git repository or from PyPi.
+A copy of the latest package release is maintained in the `latest` branch of this repository and is installable via ``pip``::
 
-Installation from local git repository::
+    pip install git+https://github.com/pitt-crc/jhub_remote_user_authenticator.git@latest
 
-    cd jhub_remote_user_authenticator
-    pip install .
-
-Installation from PyPi::
-
-    pip install jhub_remote_user_authenticator
-
-Alternately, you can add the local project folder must be on your PYTHONPATH.
+See the releases section of the GitHub repository for older package versions and release notes.
 
 -------------
 Configuration
 -------------
 
-You should edit your :file:`jupyterhub_config.py` to set the authenticator 
+You should edit your ``jupyterhub_config.py`` file to set the authenticator 
 class::
 
     c.JupyterHub.authenticator_class = 'jhub_remote_user_authenticator.remote_user_auth.RemoteUserAuthenticator'
@@ -76,3 +69,5 @@ Only package versions marked as a release should be sent to deployment. To creat
 1. Edit the package version in the `version.py` file.
 2. Tag the git repo with the new version number.
 3. Create a new GitHub release using the tagged version. Make sure to include a description of changes.
+
+Once a new release is tagged, the content of the `latest` branch will automatically be updated to reflect the content of that release.
