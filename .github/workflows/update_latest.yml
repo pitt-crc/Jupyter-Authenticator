@@ -27,7 +27,7 @@ jobs:
     - name: Update branch content
       run: |
         # Checkout replace the `latest` branch with content from latest tag
-        # git branch -D latest &>/dev/null
+        git branch -D latest
         git checkout -b latest ${{ steps.get-tag.outputs.latestTag }} 
         
     - name: Push changes
