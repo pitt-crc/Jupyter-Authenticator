@@ -66,4 +66,13 @@ to add local accounts through the admin interface if configured to do so.
    proxy, drops headers that contain an underscore by default. See
    http://nginx.org/en/docs/http/ngx_http_core_module.html#underscores_in_headers
    for details.
+   
+------------------
+Release Procedures
+------------------
 
+Only package versions marked as a release should be sent to deployment. To create a new release:
+
+1. Edit the package version in the `version.py` file.
+2. Tag the git repo with the new version number.
+3. Create a new GitHub release using the tagged version. Make sure to include a description of changes.
