@@ -17,9 +17,6 @@ class RemoteUserLoginHandler(BaseHandler):
         else:
             user = self.user_from_username(remote_user)
             home_dir_exists = os.path.exists(os.path.expanduser('~{}'.format(remote_user)))
-
-            if remote_user == "saz31":
-                self.redirect("https://crc.pitt.edu/node/1041")
             
             if (not home_dir_exists) and remote_roles == "SAM-SSLVPNSAMUsers":
                 self.redirect("https://crc.pitt.edu/node/1042")
