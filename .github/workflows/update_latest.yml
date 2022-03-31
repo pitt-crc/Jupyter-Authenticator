@@ -25,7 +25,7 @@ jobs:
         latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
 
         # Checkout replace the `latest` branch with content from latest tag
-        git branch -D latest
+        git branch -D latest &>/dev/null 
         git checkout -b latest $latestTag
         
     - name: Push changes
