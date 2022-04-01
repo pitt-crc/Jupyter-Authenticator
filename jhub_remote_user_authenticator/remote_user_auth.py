@@ -20,14 +20,14 @@ class RemoteUserLoginHandler(BaseHandler):
         home_dir_exists = os.path.exists(os.path.expanduser('~{}'.format(remote_user)))
 
         if (not home_dir_exists) and remote_roles == "SAM-SSLVPNSAMUsers":
-            self.redirect("https://crc.pitt.edu/node/1042")
+            self.redirect("https://crc.pitt.edu/Access-CRC-Web-Portals")
 
         elif remote_roles == "SAM-SSLVPNSAMUsers":
             self.set_login_cookie(user)
             self.redirect(url_path_join(self.hub.server.base_url, 'home'))
 
         else:
-            self.redirect("https://crc.pitt.edu/node/1041")
+            self.redirect("https://crc.pitt.edu/")
 
 
 class RemoteUserAuthenticator(Authenticator):
