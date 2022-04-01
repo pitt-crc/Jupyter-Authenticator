@@ -12,7 +12,6 @@ class RemoteUserLoginHandler(BaseHandler):
     """Attempt user login using data from incoming request header"""
 
     def get(self):
-
         # Check for username in header information
         header_name = self.authenticator.header_name
         remote_user = self.request.headers.get(header_name, "").lower()
@@ -28,8 +27,8 @@ class RemoteUserLoginHandler(BaseHandler):
 
         # Require the user has an existing home directory
         user = self.user_from_username(remote_user)
-        home_dir_exists = os.path.exists(os.path.expanduser('~{}'.format(remote_user)))
-        if not home_dir_exists:
+        user_home_dir = os.path.expanduser('~{}'.format(remote_user))
+        if not os.path.exists(user_home_dir):
             self.redirect("https://crc.pitt.edu/node/1042")
 
         # Facilitate user authentication
