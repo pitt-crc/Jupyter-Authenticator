@@ -27,7 +27,7 @@ class RemoteUserLoginHandler(BaseHandler):
             self.redirect(url_path_join(self.hub.server.base_url, 'home'))
 
         else:
-            self.redirect("https://crc.pitt.edu/Access-CRC-Web-Portals")
+            self.redirect("https://crc.pitt.edu/")
 
 
 class RemoteUserAuthenticator(Authenticator):
