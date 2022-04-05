@@ -54,12 +54,12 @@ class AuthenticatorSettings:
         help="Required VPN role for accessing the service.")
 
     user_redirect = Unicode(
-        default_value='https://crc.pitt.edu/node/1042',
+        default_value='https://crc.pitt.edu/Access-CRC-Web-Portals',
         config=True,
         help="Url to redirect to if user has no home directory.")
 
     vpn_redirect = Unicode(
-        default_value='https://crc.pitt.edu/node/1041',
+        default_value='https://crc.pitt.edu/Access-CRC-Web-Portals',
         config=True,
         help="Url to redirect to if user is missing necessary VPN role.")
 
