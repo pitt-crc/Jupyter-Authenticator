@@ -3,7 +3,7 @@
 Custom JupyterHub authenticator built for the CRC based on the
 [hub_remote_user_authenticator](https://github.com/cwaldbieser/jhub_remote_user_authenticator) tool.
 
-# Architecture and Security Recommendations
+## Architecture and Security Recommendations
 
 This authenticator relies on HTTP headers that can be spoofed by a malicious client.
 To protect against this, an authenticating proxy be placed in front
@@ -32,7 +32,7 @@ c.JupyterHub.authenticator_class = 'jhub_remote_user_authenticator.remote_user_a
 ```
 
 You should be able to start jupyterhub. The "/hub/login" resource
-will look for the authenticated username in the HTTP header "REMOTE_USER" [#f1]_.
+will look for the authenticated username in the HTTP header "REMOTE_USER".
 If found, and not blank, you will be logged in as that user.
 
 Alternatively, you can use `RemoteUserLocalAuthenticator`:
@@ -58,10 +58,9 @@ for details.
 ## Release Procedures
 
 Only package versions marked as a release should be sent to deployment. To create a new release:
-
-1. Edit the package version in `version.py`.
-2. Tag the git repo with the new version number.
-3. Create a new GitHub release using the tagged version. Make sure to include a description of any changes.
+ 1. Edit the package version in `version.py`.
+ 2. Tag the git repo with the new version number.
+ 3. Create a new GitHub release using the tagged version. Make sure to include a description of any changes.
 
 Once a new release is tagged, the content of the `latest` branch will  be updated automatically by 
 git GitHub actions to reflect the content of that release.
