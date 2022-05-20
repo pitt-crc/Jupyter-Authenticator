@@ -11,7 +11,7 @@ of Jupyterhub. The JupyterHub daemon should **only** be accessible from the prox
 and **never** directly accessible by a client.
 
 The authenticating proxy should remove any HTTP headers from incoming
-requests and only applies the header to proxied requests
+requests and only apply the header to proxied requests
 that have been properly authenticated.
 
 ## Installation
@@ -24,15 +24,15 @@ pip install git+https://github.com/pitt-crc/jhub_remote_user_authenticator.git@l
 
 See the release section of the GitHub repository for older package versions and release notes.
 
-You will need to edit your ``jupyterhub_config.py`` file to set the authenticator 
+You will need to edit your `jupyterhub_config.py` file to set the authenticator
 class:
 
 ```python
 c.JupyterHub.authenticator_class = 'jhub_remote_user_authenticator.remote_user_auth.RemoteUserAuthenticator'
 ```
 
-You should be able to start jupyterhub. The "/hub/login" resource
-will look for the authenticated username in the HTTP header "REMOTE_USER".
+You should be able to start jupyterhub. The `/hub/login` resource
+will look for the authenticated username in the HTTP header `"Cn"`.
 If found, and not blank, you will be logged in as that user.
 
 Alternatively, you can use `RemoteUserLocalAuthenticator`:
@@ -47,20 +47,21 @@ to add local accounts through the admin interface if configured to do so.
 
 ## Configuration
 
-The HTTP header names and failure redirects are configurable.  
-See the ``AuthenticatorSettings`` class for more details.
+The HTTP header names and failure redirects are configurable.
+See the `AuthenticatorSettings` class for more details.
 
 Note that NGINX, a popular
 proxy, drops headers that contain an underscore by default. See
-http://nginx.org/en/docs/http/ngx_http_core_module.html#underscores_in_headers
+[the NGINX docs](http://nginx.org/en/docs/http/ngx_http_core_module.html#underscores_in_headers)
 for details.
-   
+
 ## Release Procedures
 
 Only package versions marked as a release should be sent to deployment. To create a new release:
- 1. Edit the package version in `version.py`.
- 2. Tag the git repo with the new version number.
- 3. Create a new GitHub release using the tagged version. Make sure to include a description of any changes.
 
-Once a new release is tagged, the content of the `latest` branch will  be updated automatically by 
+1. Edit the package version in `version.py`.
+2. Tag the git repo with the new version number.
+3. Create a new GitHub release using the tagged version. Make sure to include a description of any changes.
+
+Once a new release is tagged, the content of the `latest` branch will be updated automatically by
 git GitHub actions to reflect the content of that release.
