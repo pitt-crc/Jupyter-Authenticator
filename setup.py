@@ -20,7 +20,7 @@ with open(requirements_path) as requirements_file:
 setup_args = dict(
     name='crc_jupyter_auth',
     packages=find_packages(),
-    # version=version_ns['__version__'],
+    version=version_ns['__version__'],
     description='A custom JupyterHub authenticator built for the Pitt Center for Research Computing.',
     license='GPLv3',
     platforms='Linux',
