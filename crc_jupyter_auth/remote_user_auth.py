@@ -1,3 +1,5 @@
+"""JupyterHub plugin for authenticating users and routing incoming HTTP requests."""
+
 import os
 
 from jupyterhub.auth import Authenticator
@@ -8,10 +10,22 @@ from tornado import gen, web
 from traitlets import Unicode
 
 
+# noinspection PyAbstractClass
 class RemoteUserLoginHandler(BaseHandler):
-    """Attempt user login using data from incoming request header"""
+    """An HTTP request handler for incoming authentication attempts.
+
+     HTTP requests are redirected by this handler based on the incoming
+     request header. Where incoming traffic is redirected is determined
+     by the JupyterHub configuration file. See the ``AuthenticatorSettings``
+     class for default config values.
+
+     In all cases, if no username is given in the request header,
+     the request is redirected to a 401 error.
+     """
 
     def get(self):
+        """Parse an incoming ``get`` request and route users appropriately"""
+
         # Check for username in header information
         header_name = self.authenticator.header_name
         remote_user = self.request.headers.get(header_name, "").lower().strip()
@@ -19,6 +33,7 @@ class RemoteUserLoginHandler(BaseHandler):
             raise web.HTTPError(401)
 
         # Check for necessary VPN role using request headers
+        # Multiple roles are delimited by a semicolon
         header_vpn = self.authenticator.header_vpn
         remote_roles = self.request.headers.get(header_vpn, "").strip().split(';')
         if self.authenticator.required_vpn_role in remote_roles:
@@ -36,7 +51,11 @@ class RemoteUserLoginHandler(BaseHandler):
 
 
 class AuthenticatorSettings:
-    """Defines common, configurable settings for user authenticators."""
+    """Defines common, configurable settings for user authentication classes.
+
+    The value of attributes defined for this class can be modified in
+    deployment via the JupyterHub configuration file.
+    """
 
     header_name = Unicode(
         default_value='Cn',
@@ -65,9 +84,22 @@ class AuthenticatorSettings:
 
 
 class RemoteUserAuthenticator(AuthenticatorSettings, Authenticator):
-    """Accept the authenticated user name from the REMOTE_USER HTTP header."""
+    """A base class for implementing an authentication provider for JupyterHub
+
+    Handles the authentication of users and routes traffic from successfully
+    authenticated users using the ``RemoteUserLoginHandler``.
+    """
 
     def get_handlers(self, app):
+        """Return any custom handlers that need to be registered with the parent authenticator
+
+        Args:
+            app: The JupyterHub application object, in case it needs to be accessed for info
+
+        Returns:
+            A list of authentication handlers and the corresponding urls ``[('/url', Handler), ...]``
+        """
+
         return [
             (r'/login', RemoteUserLoginHandler),
         ]
@@ -78,13 +110,25 @@ class RemoteUserAuthenticator(AuthenticatorSettings, Authenticator):
 
 
 class RemoteUserLocalAuthenticator(AuthenticatorSettings, LocalAuthenticator):
-    """
-    Accept the authenticated user name from the REMOTE_USER HTTP header.
-    Derived from LocalAuthenticator for use of features such as adding
-    local accounts through the admin interface.
+    """Base class for Authenticators that works with local Linux/UNIX users
+
+    This class is similar to the ``RemoteUserAuthenticator`` except it can
+    check for local user accounts and attempt to create them if they don't
+    exist.
+
+    Successfully authenticated users are routed using the ``RemoteUserLoginHandler``.
     """
 
     def get_handlers(self, app):
+        """Return any custom handlers that need to be registered with the parent authenticator
+
+        Args:
+            app: The JupyterHub application object, in case it needs to be accessed for info
+
+        Returns:
+            A list of authentication handlers and the corresponding urls ``[('/url', Handler), ...]``
+        """
+
         return [
             (r'/login', RemoteUserLoginHandler),
         ]
