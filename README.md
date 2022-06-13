@@ -1,28 +1,33 @@
-# Jupyterhub REMOTE_USER Authenticator
+# CRC Jupyter Authenticator
 
-Custom JupyterHub authenticator built for the CRC based on the
-[hub_remote_user_authenticator](https://github.com/cwaldbieser/jhub_remote_user_authenticator) tool.
+A custom JupyterHub authenticator built for the Pitt Center for Research Computing.
 
-## Architecture and Security Recommendations
+This repository is based on the open source
+[jhub_remote_user_authenticator](https://github.com/cwaldbieser/jhub_remote_user_authenticator) tool.
 
-This authenticator relies on HTTP headers that can be spoofed by a malicious client.
-To protect against this, an authenticating proxy be placed in front
-of Jupyterhub. The JupyterHub daemon should **only** be accessible from the proxy
-and **never** directly accessible by a client.
+## Installation and Setup
 
-The authenticating proxy should remove any HTTP headers from incoming
-requests and only apply the header to proxied requests
-that have been properly authenticated.
+Please read through the **entire** installation process to ensure a stable and secure setup.
 
-## Installation
+### Installing the package
 
-A copy of the latest package release is maintained in the `latest` branch of this repository and is installable via `pip`
+Download the source code and install the package using the `pip` package manager:
 
 ```bash
-pip install git+https://github.com/pitt-crc/jhub_remote_user_authenticator.git@latest
+git clone https://github.com/pitt-crc/Jupyter-Authenticator.git
+pip install Jupyter-Authenticator
 ```
 
-See the release section of the GitHub repository for older package versions and release notes.
+Older versions can be installed by checking out the appropriate tag with `git`:
+
+```bash
+cd Jupyter-Authenticator
+git fetch
+git checkout tags/[RELEASETAG]
+pip install .
+```
+
+### Configuration
 
 You will need to edit your `jupyterhub_config.py` file to set the authenticator
 class:
@@ -30,10 +35,6 @@ class:
 ```python
 c.JupyterHub.authenticator_class = 'jhub_remote_user_authenticator.remote_user_auth.RemoteUserAuthenticator'
 ```
-
-You should be able to start jupyterhub. The `/hub/login` resource
-will look for the authenticated username in the HTTP header `"Cn"`.
-If found, and not blank, you will be logged in as that user.
 
 Alternatively, you can use `RemoteUserLocalAuthenticator`:
 
@@ -45,19 +46,27 @@ This provides the same authentication functionality but is derived from
 `LocalAuthenticator` and therefore provides features such as the ability
 to add local accounts through the admin interface if configured to do so.
 
-## Configuration
-
+The authenticator works by checking for the authenticated username in the HTTP header `"Cn"`.
+If found, and not blank, the client will be logged in as that user.
 The HTTP header names and failure redirects are configurable.
 See the `AuthenticatorSettings` class for more details.
 
-Note that NGINX, a popular
-proxy, drops headers that contain an underscore by default. See
-[the NGINX docs](http://nginx.org/en/docs/http/ngx_http_core_module.html#underscores_in_headers)
-for details.
+### Architecture and Security Recommendations
 
-## Release Procedures
+This authenticator relies on HTTP headers that can be spoofed by a malicious client.
+To protect against this, an authenticating proxy should be placed in front
+of Jupyterhub. The JupyterHub daemon should **only** be accessible from the proxy
+and **never** directly accessible by a client.
 
-Only package versions marked as a release should be sent to deployment. To create a new release:
+The authenticating proxy should remove any HTTP headers from incoming
+requests and only apply the header to proxied requests
+that have been properly authenticated.
+
+## Creating a New Release
+
+Ongoing development takes place against the default `main` branch. 
+The `latest` branch reflects the most recently released version of the code.
+Follow the procedures below to create and deploy a new release:
 
 1. Edit the package version in `version.py`.
 2. Tag the git repo with the new version number.
