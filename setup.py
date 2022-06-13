@@ -1,58 +1,37 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# Copyright (c) Juptyer Development Team.
-# Distributed under the terms of the Modified BSD License.
+from os import path
 
-#-----------------------------------------------------------------------------
-# Minimal Python version sanity check (from IPython/Jupyterhub)
-#-----------------------------------------------------------------------------
+from setuptools import find_packages, setup
 
-from __future__ import print_function
-
-import os
-import sys
-
-from setuptools import setup
-
-pjoin = os.path.join
-here = os.path.abspath(os.path.dirname(__file__))
+parent_dir = path.abspath(path.dirname(__file__))
+version_path = path.join(parent_dir, 'version.py')
+requirements_path = path.join(parent_dir, 'requirements.txt')
 
 # Get the current package version.
 version_ns = {}
-with open(pjoin(here, 'version.py')) as f:
-    exec(f.read(), {}, version_ns)
+with open(version_path) as version_file:
+    exec(version_file.read(), {}, version_ns)
 
-setup_args = dict(
-    name                = 'jhub_remote_user_authenticator',
-    packages            = ['jhub_remote_user_authenticator'],
-    version             = version_ns['__version__'],
-    description         = """REMOTE_USER Authenticator: An Authenticator for Jupyterhub to read user information from HTTP request headers, as when running behind an authenticating proxy.""",
-    long_description    = "",
-    author              = "Carl (https://github.com/cwaldbieser)",
-    author_email        = "cwaldbieser@gmail.com",
-    url                 = "https://github.com/cwaldbieser/jhub_remote_user_authenticator",
-    license             = "GPLv3",
-    platforms           = "Linux, Mac OS X",
-    keywords            = ['Interactive', 'Interpreter', 'Shell', 'Web'],
-    classifiers         = [
-        'Intended Audience :: Developers',
+# Get a list of package dependencies
+with open(requirements_path) as requirements_file:
+    requirements = requirements_file.read().splitlines()
+
+setup(
+    name='crc_jupyter_auth',
+    packages=find_packages(),
+    version=version_ns['__version__'],
+    description='A custom JupyterHub authenticator built for the Pitt Center for Research Computing.',
+    license='GPLv3',
+    platforms='Linux',
+    keywords=['Interactive', 'Interpreter', 'Shell', 'Web'],
+    classifiers=[
         'Intended Audience :: System Administrators',
-        'Intended Audience :: Science/Research',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
     ],
-    data_files          = [('.', ['version.py'])],
+    data_files=[('.', ['version.py'])],
+    install_requires=requirements
 )
-
-# setuptools requirements
-if 'setuptools' in sys.modules:
-    setup_args['install_requires'] = install_requires = []
-    install_requires.append('jupyterhub')
-
-def main():
-    setup(**setup_args)
-
-if __name__ == '__main__':
-    main()
