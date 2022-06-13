@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
+"""Installation setup file for the ``crc_jupyter_auth`` package."""
 
 from os import path
 
