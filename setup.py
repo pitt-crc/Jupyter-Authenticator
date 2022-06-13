@@ -3,7 +3,7 @@
 
 from os import path
 
-from setuptools import find_packages
+from setuptools import find_packages, setup
 
 parent_dir = path.abspath(path.dirname(__file__))
 version_path = path.join(parent_dir, 'version.py')
@@ -14,10 +14,11 @@ version_ns = {}
 with open(version_path) as version_file:
     exec(version_file.read(), {}, version_ns)
 
+# Get a list of package dependencies
 with open(requirements_path) as requirements_file:
     requirements = requirements_file.read().splitlines()
 
-setup_args = dict(
+setup(
     name='crc_jupyter_auth',
     packages=find_packages(),
     version=version_ns['__version__'],
