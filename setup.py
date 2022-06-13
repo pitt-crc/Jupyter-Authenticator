@@ -1,22 +1,26 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from __future__ import print_function
-
 from os import path
+
+from setuptools import find_packages
 
 parent_dir = path.abspath(path.dirname(__file__))
 version_path = path.join(parent_dir, 'version.py')
+requirements_path = path.join(parent_dir, 'requirements.txt')
 
 # Get the current package version.
 version_ns = {}
 with open(version_path) as version_file:
     exec(version_file.read(), {}, version_ns)
 
+with open(requirements_path) as requirements_file:
+    requirements = requirements_file.read().splitlines()
+
 setup_args = dict(
     name='crc_jupyter_auth',
-    packages=['crc_jupyter_auth'],
-    version=version_ns['__version__'],
+    packages=find_packages(),
+    # version=version_ns['__version__'],
     description='A custom JupyterHub authenticator built for the Pitt Center for Research Computing.',
     license='GPLv3',
     platforms='Linux',
@@ -28,5 +32,5 @@ setup_args = dict(
         'Programming Language :: Python :: 3',
     ],
     data_files=[('.', ['version.py'])],
-    requirements=['jupyterhub']
+    install_requires=requirements
 )
