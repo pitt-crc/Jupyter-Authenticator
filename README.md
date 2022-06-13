@@ -1,5 +1,7 @@
 # CRC Jupyter Authenticator
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/5e1a00bf8dbe4daf8275fc88ce748ea6)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pitt-crc/Jupyter-Authenticator&amp;utm_campaign=Badge_Grade)
+
 A custom JupyterHub authenticator built for the Pitt Center for Research Computing.
 
 This repository is based on the open source
