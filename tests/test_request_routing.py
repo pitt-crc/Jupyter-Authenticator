@@ -8,7 +8,7 @@ from tornado import web
 from tornado.httputil import HTTPServerRequest, HTTPHeaders, HTTPConnection
 from tornado.web import Application
 
-from crc_jupyter_auth.remote_user_auth import RemoteUserLoginHandler, RemoteUserAuthenticator
+from crc_jupyter_auth.remote_user_auth import RemoteUserLoginHandler, RemoteUserAuthenticator, RemoteUserLocalAuthenticator
 
 
 class RequestRouting(TestCase):
@@ -82,3 +82,24 @@ class RequestRouting(TestCase):
         """Test valid authentication attempts are redirected to the JupyterHub URL"""
 
         raise NotImplementedError
+
+
+class HandlerRegistration(TestCase):
+    """Test authentication classes use the ``RemoteUserLoginHandler`` to route login requests"""
+
+    def run_test_on_authenticator(self, authenticator: Authenticator) -> None:
+        """Assert the given authenticator routes ``/login`` traffic using the ``RemoteUserLoginHandler`` class"""
+
+        handlers_list = authenticator.get_handlers(app=None)
+        handlers_dict = dict(*zip(handlers_list))
+        self.assertIs(RemoteUserLoginHandler, handlers_dict['/login'])
+
+    def test_remote_user_authenticator(self) -> None:
+        """Test the ``RemoteUserAuthenticator`` routes traffic using the ``RemoteUserLoginHandler`` handler"""
+
+        self.run_test_on_authenticator(RemoteUserAuthenticator())
+
+    def test_remote_user_local_authenticator(self) -> None:
+        """Test the ``RemoteUserLocalAuthenticator`` routes traffic using the ``RemoteUserLoginHandler`` handler"""
+
+        self.run_test_on_authenticator(RemoteUserLocalAuthenticator())
