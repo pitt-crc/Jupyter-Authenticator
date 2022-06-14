@@ -14,6 +14,7 @@ from crc_jupyter_auth.remote_user_auth import RemoteUserLoginHandler, RemoteUser
 class RequestRouting(TestCase):
     """Test the routing of HTTP authentication requests"""
 
+    # TODO: This setup is incorrect. It doesn't instantiate objects in a way where traitlets become functional
     @staticmethod
     def create_http_request_handler(authenticator: Authenticator, header_data: dict) -> RemoteUserLoginHandler:
         """Create a mock HTTP request handler
@@ -47,15 +48,19 @@ class RequestRouting(TestCase):
         """Test for a 401 error when the username is missing from the HTTP header"""
 
         request_handler = self.create_http_request_handler(RemoteUserAuthenticator(), dict())
-        with self.assertRaises(web.HTTPError(401)):
+        with self.assertRaises(web.HTTPError):
             request_handler.get()
+
+        self.assertEqual(401, request_handler.get_status())
 
     def test_blank_username_401(self) -> None:
         """Test for a 401 error when the username is blank"""
 
         request_handler = self.create_http_request_handler(RemoteUserAuthenticator(), {'Cn': ''})
-        with self.assertRaises(web.HTTPError(401)):
+        with self.assertRaises(web.HTTPError):
             request_handler.get()
+
+        self.assertEqual(401, request_handler.get_status())
 
     def test_missing_vpn_role_redirect(self) -> None:
         """Test users are redirected to the ``vpn_redirect`` url for missing VPN roles"""
@@ -71,7 +76,18 @@ class RequestRouting(TestCase):
     def test_incorrect_vpn_role_redirect(self) -> None:
         """Test users are redirected to the ``vpn_redirect`` url for incorrect VPN roles"""
 
-        raise NotImplementedError
+        authenticator = RemoteUserAuthenticator
+        header_data = {
+            authenticator.header_name: 'username',
+            authenticator.header_vpn: 'FAKEROLE1;FAKEROLE2'
+        }
+
+        request_handler = self.create_http_request_handler(authenticator, header_data)
+        request_handler.get()
+
+        # TODO: Get the destination without accessing private attributes
+        destination = request_handler._headers['Location']
+        self.assertEqual(authenticator.vpn_redirect, destination)
 
     def test_missing_home_dir_redirect(self) -> None:
         """Test users are redirected to the ``user_redirect`` url if they do not have a home directory"""
