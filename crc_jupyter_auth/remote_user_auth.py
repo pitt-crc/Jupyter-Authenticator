@@ -36,7 +36,7 @@ class RemoteUserLoginHandler(BaseHandler):
         # Multiple roles are delimited by a semicolon
         header_vpn = self.authenticator.header_vpn
         remote_roles = self.request.headers.get(header_vpn, "").strip().split(';')
-        if self.authenticator.required_vpn_role in remote_roles:
+        if self.authenticator.required_vpn_role not in remote_roles:
             self.redirect(self.authenticator.vpn_redirect)
 
         # Require the user has an existing home directory
