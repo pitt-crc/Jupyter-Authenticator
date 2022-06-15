@@ -140,12 +140,12 @@ class HandlerRegistration(TestCase):
         handlers_dict = dict(*zip(handlers_list))
         self.assertIs(RemoteUserLoginHandler, handlers_dict['/login'])
 
-    def test_remote_user_authenticator(self) -> None:
+    def test_user_authenticator(self) -> None:
         """Test the ``RemoteUserAuthenticator`` routes traffic using the ``RemoteUserLoginHandler`` handler"""
 
         self.run_test_on_authenticator(RemoteUserAuthenticator())
 
-    def test_remote_user_local_authenticator(self) -> None:
+    def test_local_authenticator(self) -> None:
         """Test the ``RemoteUserLocalAuthenticator`` routes traffic using the ``RemoteUserLoginHandler`` handler"""
 
         self.run_test_on_authenticator(RemoteUserLocalAuthenticator())
