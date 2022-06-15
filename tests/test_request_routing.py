@@ -10,7 +10,11 @@ from tornado import web
 from tornado.httputil import HTTPServerRequest, HTTPHeaders, HTTPConnection
 from tornado.web import Application
 
-from crc_jupyter_auth.remote_user_auth import RemoteUserLoginHandler, RemoteUserAuthenticator, RemoteUserLocalAuthenticator
+from crc_jupyter_auth.remote_user_auth import (
+    RemoteUserLoginHandler,
+    RemoteUserAuthenticator,
+    RemoteUserLocalAuthenticator
+)
 
 
 class RequestRouting(TestCase):
@@ -64,7 +68,7 @@ class RequestRouting(TestCase):
 
         self.assertEqual(401, request_handler.get_status())
 
-    def test_missing_vpn_role_redirect(self) -> None:
+    def test_missing_vpn_role(self) -> None:
         """Test users are redirected to the ``vpn_redirect`` url for missing VPN roles"""
 
         authenticator = RemoteUserAuthenticator()
@@ -75,7 +79,7 @@ class RequestRouting(TestCase):
         destination = request_handler._headers['Location']
         self.assertEqual(authenticator.vpn_redirect, destination)
 
-    def test_incorrect_vpn_role_redirect(self) -> None:
+    def test_incorrect_vpn_role(self) -> None:
         """Test users are redirected to the ``vpn_redirect`` url for incorrect VPN roles"""
 
         authenticator = RemoteUserAuthenticator()
