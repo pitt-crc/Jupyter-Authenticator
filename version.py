@@ -1,12 +1,7 @@
-# Copyright (c) Jupyter Development Team.
-# Distributed under the terms of the Modified BSD License.
+"""Define the semantic version number for the parent application"""
 
-version_info = (
-    0,
-    3,
-    0,
-    #'dev', # comment-out this line for a release
-)
+# Add 'dev' to the end of the tuple if desired
+version_info = (0, 3, 0,)
 __version__ = '.'.join(map(str, version_info[:3]))
 
 if len(version_info) > 3:
