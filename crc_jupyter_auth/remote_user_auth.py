@@ -106,6 +106,11 @@ class RemoteUserAuthenticator(AuthenticatorSettings, Authenticator):
 
     @gen.coroutine
     def authenticate(self, *args):
+        """Authenticate a user with login form data
+
+        See parent class for requirements on implementing this method.
+        """
+
         raise NotImplementedError()
 
 
@@ -135,4 +140,9 @@ class RemoteUserLocalAuthenticator(AuthenticatorSettings, LocalAuthenticator):
 
     @gen.coroutine
     def authenticate(self, *args):
+        """Authenticate a user with login form data
+
+        See parent class for requirements on implementing this method.
+        """
+
         raise NotImplementedError()
