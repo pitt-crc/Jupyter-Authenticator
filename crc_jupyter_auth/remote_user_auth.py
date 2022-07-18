@@ -1,4 +1,4 @@
-"""JupyterHub plugin for authenticating users and routing incoming HTTP requests."""
+"""Custom HTTP request routing based on auer authetication status."""
 
 import os
 

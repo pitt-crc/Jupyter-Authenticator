@@ -1,26 +1,35 @@
 """Installation setup file for the ``crc_jupyter_auth`` package."""
 
-from os import path
+import re
+from pathlib import Path
 
 from setuptools import find_packages, setup
 
-parent_dir = path.abspath(path.dirname(__file__))
-version_path = path.join(parent_dir, 'version.py')
-requirements_path = path.join(parent_dir, 'requirements.txt')
 
-# Get the current package version.
-version_ns = {}
-with open(version_path) as version_file:
-    exec(version_file.read(), {}, version_ns)
+def get_requirements():
+    """Return a list of package dependencies"""
 
-# Get a list of package dependencies
-with open(requirements_path) as requirements_file:
-    requirements = requirements_file.read().splitlines()
+    requirements_path = Path(__file__).parent / 'requirements.txt'
+    with requirements_path.open() as req_file:
+        return req_file.read().splitlines()
+
+
+def get_version():
+    """Return the semantic package version"""
+
+    init_path = Path(__file__).resolve().parent / 'crc_jupyter_auth/__init__.py'
+    init_text = init_path.read_text()
+
+    version_regex = re.compile("__version__ = '(.*?)'")
+    version = version_regex.findall(init_text)[0]
+
+    return version
+
 
 setup(
     name='crc_jupyter_auth',
     packages=find_packages(),
-    version=version_ns['__version__'],
+    version=get_version(),
     description='A custom JupyterHub authenticator built for the Pitt Center for Research Computing.',
     license='GPLv3',
     platforms='Linux',
@@ -31,6 +40,5 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
     ],
-    data_files=[('.', ['version.py'])],
-    install_requires=requirements
+    install_requires=get_requirements()
 )
