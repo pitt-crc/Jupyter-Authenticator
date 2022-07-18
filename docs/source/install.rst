@@ -6,14 +6,14 @@ Please read through the **entire** installation process to ensure a stable and s
 Installing the package
 ----------------------
 
-Download the source code and install the package using the `pip` package manager:
+Download the source code and install the package using the ``pip`` package manager:
 
 .. code-block:: bash
 
    git clone https://github.com/pitt-crc/Jupyter-Authenticator.git
    pip install Jupyter-Authenticator
 
-Older versions can be installed by checking out the appropriate tag with `git`:
+Older versions can be installed by checking out the appropriate tag with ``git``:
 
 .. code-block:: bash
 
@@ -26,27 +26,27 @@ Older versions can be installed by checking out the appropriate tag with `git`:
 Configuration
 -------------
 
-You will need to edit your `jupyterhub_config.py` file to set the authenticator
+You will need to edit your ``jupyterhub_config.py`` file to set the authenticator
 class:
 
 .. code-block:: python
 
    c.JupyterHub.authenticator_class = 'crc_jupyter_auth.remote_user_auth.RemoteUserAuthenticator'
 
-Alternatively, you can use `RemoteUserLocalAuthenticator`:
+Alternatively, you can use ``RemoteUserLocalAuthenticator``:
 
 .. code-block:: python
 
    c.JupyterHub.authenticator_class = 'crc_jupyter_auth.remote_user_auth.RemoteUserLocalAuthenticator'
 
 This provides the same authentication functionality but is derived from
-`LocalAuthenticator` and therefore provides features such as the ability
+``LocalAuthenticator`` and therefore provides features such as the ability
 to add local accounts through the admin interface if configured to do so.
 
-The authenticator works by checking for the authenticated username in the HTTP header `"Cn"`.
+The authenticator works by checking for the authenticated username in the HTTP header ``"Cn"``.
 If found, and not blank, the client will be logged in as that user.
 The HTTP header names and failure redirects are configurable.
-See the `AuthenticatorSettings` class for more details.
+See the ``AuthenticatorSettings`` class for more details.
 
 Architecture and Security Recommendations
 -----------------------------------------
