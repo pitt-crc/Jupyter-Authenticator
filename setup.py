@@ -40,6 +40,5 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
     ],
-    data_files=[('.', ['version.py'])],
     install_requires=get_requirements()
 )
