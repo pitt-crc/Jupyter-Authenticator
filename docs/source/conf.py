@@ -15,7 +15,7 @@ sys.path.insert(0, str(project_root))
 
 from crc_jupyter_auth import __version__  # , __author__, __copyright__
 
-project = u'CRC Wrapper Applications'
+project = u'CRC JupyterHub Authenticator'
 # copyright = __copyright__
 # author = __author__
 release = __version__
@@ -29,8 +29,15 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
+    'autoapi.extension',
     'sphinx_copybutton',
 ]
+
+# Configure automatic documentation of commandline applications
+autoapi_type = 'python'
+autoapi_dirs = [str(project_root / 'crc_jupyter_auth')]
+# autoapi_add_toctree_entry = False
+autoapi_template_dir = 'templates'
 
 # Don't include code prompts when copying python code
 copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
