@@ -31,5 +31,5 @@ configuration file.
    :maxdepth: 0
    :glob:
 
-   autoapi/crc_jupyter_auth/**/index
+   remote_user_auth
 

@@ -1,4 +1,10 @@
-"""Custom HTTP request routing based on auer authetication status."""
+"""The ``remote_user_auth`` module extends the default user authentication
+classes defined by the ``jupyterhub`` package. It is responsible for
+handling HTTP request routing based on user authentication status.
+
+Module Contents
+---------------
+"""
 
 import os
 

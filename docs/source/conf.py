@@ -29,15 +29,8 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
-    'autoapi.extension',
     'sphinx_copybutton',
 ]
-
-# Configure automatic documentation of commandline applications
-autoapi_type = 'python'
-autoapi_dirs = [str(project_root / 'crc_jupyter_auth')]
-# autoapi_add_toctree_entry = False
-autoapi_template_dir = 'templates'
 
 # Don't include code prompts when copying python code
 copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
