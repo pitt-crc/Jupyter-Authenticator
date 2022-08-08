@@ -8,8 +8,7 @@ Module Contents
 
 import os
 
-from jupyterhub.auth import Authenticator
-from jupyterhub.auth import LocalAuthenticator
+from jupyterhub.auth import Authenticator, LocalAuthenticator
 from jupyterhub.handlers import BaseHandler
 from jupyterhub.utils import url_path_join
 from tornado import gen, web
@@ -67,26 +66,31 @@ class AuthenticatorSettings:
         default_value='Cn',
         config=True,
         help="HTTP header to inspect for the authenticated username.")
+    header_name.__doc__ = header_name.help
 
     header_vpn = Unicode(
         default_value='isMemberOf',
         config=True,
         help="HTTP header to inspect for user VPN role(s).")
+    header_vpn.__doc__ = header_vpn.help
 
     required_vpn_role = Unicode(
         default_value='SAM-SSLVPNSAMUsers',
         config=True,
         help="Required VPN role for accessing the service.")
+    required_vpn_role.__doc__ = required_vpn_role.help
 
     user_redirect = Unicode(
         default_value='https://crc.pitt.edu/Access-CRC-Web-Portals',
         config=True,
         help="Url to redirect to if user has no home directory.")
+    user_redirect.__doc__ = user_redirect.help
 
     vpn_redirect = Unicode(
         default_value='https://crc.pitt.edu/Access-CRC-Web-Portals',
         config=True,
         help="Url to redirect to if user is missing necessary VPN role.")
+    vpn_redirect.__doc__ = vpn_redirect.help
 
 
 class RemoteUserAuthenticator(AuthenticatorSettings, Authenticator):
