@@ -30,7 +30,7 @@ def get_meta():
         - license
     """
 
-    init_path = Path(__file__).resolve().parent / 'apps/__init__.py'
+    init_path = Path(__file__).resolve().parent / 'crc_jupyter_auth/__init__.py'
     init_text = init_path.read_text()
 
     version_regex = re.compile("__version__ = '(.*?)'")
