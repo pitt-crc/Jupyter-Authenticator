@@ -26,8 +26,7 @@ Older versions can be installed by checking out the appropriate tag with ``git``
 Configuration
 -------------
 
-You will need to edit your ``jupyterhub_config.py`` file to set the authenticator
-class:
+You will need to edit your ``jupyterhub_config.py`` file to add the authenticator class:
 
 .. code-block:: python
 

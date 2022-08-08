@@ -1,20 +1,19 @@
 CRC JupyterHub Authenticator
 ============================
 
-The ``crc_jupyter_auth`` package is a JupyterHub authentication plugin designed
-specifically for the Pitt Center for Research Computing. It is based off the
+The ``crc_jupyter_auth`` package is a Jupyter authentication plugin for
+redirecting users based on their account status and VPN role.
+The utility is based on the
 `jhub_remote_user_authenticator <https://github.com/cwaldbieser/jhub_remote_user_authenticator>`_
-which was originally created for more general applications.
+package which was originally created for more general applications.
 
 How It Works
 ------------
 
 The authentication plugin checks HTTP header values from incoming authentication
-requests and routes users based on the header value. The name of the inspected
+requests and routes users based on the associated header values. The name of the inspected
 headers and the routing destination are configurable via the standard JupyterHub
 configuration file.
-
-
 
 .. toctree::
    :hidden:
