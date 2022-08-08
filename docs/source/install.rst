@@ -30,13 +30,13 @@ You will need to edit your ``jupyterhub_config.py`` file to add the authenticato
 
 .. code-block:: python
 
-   c.JupyterHub.authenticator_class = 'crc_jupyter_auth.remote_user_auth.RemoteUserAuthenticator'
+   c.JupyterHub.authenticator_class = 'crc_jupyter_auth.RemoteUserAuthenticator'
 
 Alternatively, you can use ``RemoteUserLocalAuthenticator``:
 
 .. code-block:: python
 
-   c.JupyterHub.authenticator_class = 'crc_jupyter_auth.remote_user_auth.RemoteUserLocalAuthenticator'
+   c.JupyterHub.authenticator_class = 'crc_jupyter_auth.RemoteUserLocalAuthenticator'
 
 This provides the same authentication functionality but is derived from
 ``LocalAuthenticator`` and therefore provides features such as the ability
