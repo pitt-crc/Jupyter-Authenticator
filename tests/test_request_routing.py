@@ -7,20 +7,15 @@ from jupyterhub.auth import Authenticator
 from jupyterhub.objects import Server
 from jupyterhub.utils import url_path_join
 from tornado import web
-from tornado.httputil import HTTPServerRequest, HTTPHeaders, HTTPConnection
+from tornado.httputil import HTTPConnection, HTTPHeaders, HTTPServerRequest
 from tornado.web import Application
 
-from crc_jupyter_auth.remote_user_auth import (
-    RemoteUserLoginHandler,
-    RemoteUserAuthenticator,
-    RemoteUserLocalAuthenticator
-)
+from crc_jupyter_auth.remote_user_auth import (RemoteUserAuthenticator, RemoteUserLocalAuthenticator, RemoteUserLoginHandler)
 
 
 class RequestRouting(TestCase):
     """Test the routing of HTTP authentication requests"""
 
-    # TODO: This setup is incorrect. It doesn't instantiate objects in a way where traitlets become functional
     @staticmethod
     def create_http_request_handler(authenticator: Authenticator, header_data: dict) -> RemoteUserLoginHandler:
         """Create a mock HTTP request handler
@@ -54,19 +49,19 @@ class RequestRouting(TestCase):
         """Test for a 401 error when the username is missing from the HTTP header"""
 
         request_handler = self.create_http_request_handler(RemoteUserAuthenticator(), dict())
-        with self.assertRaises(web.HTTPError):
+        with self.assertRaises(web.HTTPError) as http_exception:
             request_handler.get()
 
-        self.assertEqual(401, request_handler.get_status())
+        self.assertEqual(401, http_exception.exception.status_code)
 
     def test_blank_username_401(self) -> None:
         """Test for a 401 error when the username is blank"""
 
         request_handler = self.create_http_request_handler(RemoteUserAuthenticator(), {'Cn': ''})
-        with self.assertRaises(web.HTTPError):
+        with self.assertRaises(web.HTTPError) as http_exception:
             request_handler.get()
 
-        self.assertEqual(401, request_handler.get_status())
+        self.assertEqual(401, http_exception.exception.status_code)
 
     def test_missing_vpn_role(self) -> None:
         """Test users are redirected to the ``vpn_redirect`` url for missing VPN roles"""
