@@ -9,7 +9,11 @@ from tornado import web
 from tornado.httputil import HTTPConnection, HTTPHeaders, HTTPServerRequest
 from tornado.web import Application
 
-from crc_jupyter_auth.remote_user_auth import (RemoteUserAuthenticator, RemoteUserLocalAuthenticator, RemoteUserLoginHandler)
+from crc_jupyter_auth.remote_user_auth import (
+    RemoteUserAuthenticator,
+    RemoteUserLocalAuthenticator,
+    RemoteUserLoginHandler
+)
 
 
 class RequestRouting(TestCase):
