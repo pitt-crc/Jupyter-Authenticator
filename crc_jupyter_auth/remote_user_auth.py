@@ -43,14 +43,16 @@ class RemoteUserLoginHandler(BaseHandler):
         remote_roles = self.request.headers.get(header_vpn, "").strip().split(';')
         if self.authenticator.required_vpn_role not in remote_roles:
             self.redirect(self.authenticator.vpn_redirect)
+            return
 
         # Require the user has an existing home directory
-        user = self.user_from_username(remote_user)
         user_home_dir = os.path.expanduser('~{}'.format(remote_user))
         if not os.path.exists(user_home_dir):
             self.redirect(self.authenticator.user_redirect)
+            return
 
         # Facilitate user authentication
+        user = self.user_from_username(remote_user)
         self.set_login_cookie(user)
         self.redirect(url_path_join(self.hub.server.base_url, 'home'))
 

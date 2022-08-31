@@ -63,18 +63,18 @@ class RequestRouting(TestCase):
 
         self.assertEqual(401, http_exception.exception.status_code)
 
-    def test_missing_vpn_role(self) -> None:
+    @patch.object(RemoteUserLoginHandler, 'redirect', return_value=None)
+    def test_missing_vpn_role(self, mock_redirect_call) -> None:
         """Test users are redirected to the ``vpn_redirect`` url for missing VPN roles"""
 
         authenticator = RemoteUserAuthenticator()
         request_handler = self.create_http_request_handler(authenticator, {authenticator.header_name: 'username'})
         request_handler.get()
 
-        # TODO: Get the destination without accessing private attributes
-        destination = request_handler._headers['Location']
-        self.assertEqual(authenticator.vpn_redirect, destination)
+        mock_redirect_call.assert_called_once_with(authenticator.vpn_redirect)
 
-    def test_incorrect_vpn_role(self) -> None:
+    @patch.object(RemoteUserLoginHandler, 'redirect', return_value=None)
+    def test_incorrect_vpn_role(self, mock_redirect_call) -> None:
         """Test users are redirected to the ``vpn_redirect`` url for incorrect VPN roles"""
 
         authenticator = RemoteUserAuthenticator()
@@ -86,9 +86,7 @@ class RequestRouting(TestCase):
         request_handler = self.create_http_request_handler(authenticator, header_data)
         request_handler.get()
 
-        # TODO: Get the destination without accessing private attributes
-        destination = request_handler._headers['Location']
-        self.assertEqual(authenticator.vpn_redirect, destination)
+        mock_redirect_call.assert_called_once_with(authenticator.vpn_redirect)
 
     @patch('os.path.exists', lambda path: False)
     def test_missing_home_dir_redirect(self) -> None:
