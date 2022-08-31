@@ -1,11 +1,10 @@
 """Test HTTP request routing by the ``RemoteUserLoginHandler`` class."""
 
 from unittest import TestCase
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from jupyterhub.auth import Authenticator
 from jupyterhub.objects import Server
-from jupyterhub.utils import url_path_join
 from tornado import web
 from tornado.httputil import HTTPConnection, HTTPHeaders, HTTPServerRequest
 from tornado.web import Application
@@ -64,7 +63,7 @@ class RequestRouting(TestCase):
         self.assertEqual(401, http_exception.exception.status_code)
 
     @patch.object(RemoteUserLoginHandler, 'redirect', return_value=None)
-    def test_missing_vpn_role(self, mock_redirect_call) -> None:
+    def test_missing_vpn_role(self, mock_redirect_call: MagicMock) -> None:
         """Test users are redirected to the ``vpn_redirect`` url for missing VPN roles"""
 
         authenticator = RemoteUserAuthenticator()
@@ -74,7 +73,7 @@ class RequestRouting(TestCase):
         mock_redirect_call.assert_called_once_with(authenticator.vpn_redirect)
 
     @patch.object(RemoteUserLoginHandler, 'redirect', return_value=None)
-    def test_incorrect_vpn_role(self, mock_redirect_call) -> None:
+    def test_incorrect_vpn_role(self, mock_redirect_call: MagicMock) -> None:
         """Test users are redirected to the ``vpn_redirect`` url for incorrect VPN roles"""
 
         authenticator = RemoteUserAuthenticator()
@@ -90,7 +89,7 @@ class RequestRouting(TestCase):
 
     @patch('os.path.exists', lambda path: False)
     @patch.object(RemoteUserLoginHandler, 'redirect', return_value=None)
-    def test_missing_home_dir_redirect(self, mock_redirect_call) -> None:
+    def test_missing_home_dir_redirect(self, mock_redirect_call: MagicMock) -> None:
         """Test users are redirected to the ``user_redirect`` url if they do not have a home directory"""
 
         authenticator = RemoteUserAuthenticator()
@@ -103,23 +102,6 @@ class RequestRouting(TestCase):
         request_handler.get()
 
         mock_redirect_call.assert_called_once_with(authenticator.user_redirect)
-
-    @patch('os.path.exists', lambda path: True)
-    def test_valid_user_redirect(self) -> None:
-        """Test valid authentication attempts are redirected to the JupyterHub URL"""
-
-        authenticator = RemoteUserAuthenticator()
-        header_data = {
-            authenticator.header_name: 'username',
-            authenticator.header_vpn: authenticator.required_vpn_role
-        }
-
-        request_handler = self.create_http_request_handler(authenticator, header_data)
-        request_handler.get()
-
-        # TODO: Get the destination without accessing private attributes
-        destination = request_handler._headers['Location']
-        self.assertEqual(url_path_join(request_handler.hub.server.base_url, 'home'), destination)
 
 
 class HandlerRegistration(TestCase):

@@ -15,7 +15,6 @@ from tornado import gen, web
 from traitlets import HasTraits, Unicode
 
 
-# noinspection PyAbstractClass
 class RemoteUserLoginHandler(BaseHandler):
     """An HTTP request handler for incoming authentication attempts.
 
