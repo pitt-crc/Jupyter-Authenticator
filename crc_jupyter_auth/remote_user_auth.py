@@ -12,7 +12,7 @@ from jupyterhub.auth import Authenticator, LocalAuthenticator
 from jupyterhub.handlers import BaseHandler
 from jupyterhub.utils import url_path_join
 from tornado import gen, web
-from traitlets import Unicode
+from traitlets import HasTraits, Unicode
 
 
 # noinspection PyAbstractClass
@@ -55,7 +55,7 @@ class RemoteUserLoginHandler(BaseHandler):
         self.redirect(url_path_join(self.hub.server.base_url, 'home'))
 
 
-class AuthenticatorSettings:
+class AuthenticatorSettings(HasTraits):
     """Defines common, configurable settings for user authentication classes.
 
     The value of attributes defined for this class can be modified in
