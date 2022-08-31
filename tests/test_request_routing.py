@@ -89,7 +89,8 @@ class RequestRouting(TestCase):
         mock_redirect_call.assert_called_once_with(authenticator.vpn_redirect)
 
     @patch('os.path.exists', lambda path: False)
-    def test_missing_home_dir_redirect(self) -> None:
+    @patch.object(RemoteUserLoginHandler, 'redirect', return_value=None)
+    def test_missing_home_dir_redirect(self, mock_redirect_call) -> None:
         """Test users are redirected to the ``user_redirect`` url if they do not have a home directory"""
 
         authenticator = RemoteUserAuthenticator()
@@ -101,9 +102,7 @@ class RequestRouting(TestCase):
         request_handler = self.create_http_request_handler(authenticator, header_data)
         request_handler.get()
 
-        # TODO: Get the destination without accessing private attributes
-        destination = request_handler._headers['Location']
-        self.assertEqual(authenticator.user_redirect, destination)
+        mock_redirect_call.assert_called_once_with(authenticator.user_redirect)
 
     @patch('os.path.exists', lambda path: True)
     def test_valid_user_redirect(self) -> None:
