@@ -1,7 +1,7 @@
 Installation and Setup
 ======================
 
-Please read through the **entire** installation process to ensure a stable and secure setup.
+Use the following instructions to install and configure the **crc_jupyter_auth** package.
 
 Installing the package
 ----------------------
@@ -13,7 +13,7 @@ Download the source code and install the package using the ``pip`` package manag
    git clone https://github.com/pitt-crc/Jupyter-Authenticator.git
    pip install Jupyter-Authenticator
 
-Older versions can be installed by checking out the appropriate tag with ``git``:
+Older versions can be installed by checking out the appropriate release tag via ``git``:
 
 .. code-block:: bash
 
@@ -22,11 +22,11 @@ Older versions can be installed by checking out the appropriate tag with ``git``
    git checkout tags/[RELEASETAG]
    pip install .
 
-
 Configuration
 -------------
 
-You will need to edit your ``jupyterhub_config.py`` file to add the authenticator class:
+In the *jupyterhub_config.py* file used to configure your Jupyter installation,
+update the ``authenticator_class`` option to reflect the installed package.
 
 .. code-block:: python
 
@@ -38,9 +38,9 @@ Alternatively, you can use ``RemoteUserLocalAuthenticator``:
 
    c.JupyterHub.authenticator_class = 'crc_jupyter_auth.RemoteUserLocalAuthenticator'
 
-This provides the same authentication functionality but is derived from
-``LocalAuthenticator`` and therefore provides features such as the ability
-to add local accounts through the admin interface if configured to do so.
+ ``RemoteUserLocalAuthenticator`` class provides the same authentication functionality
+but is derived from Jupyter's builtin ``LocalAuthenticator`` class. This provides extra
+features such as the ability to add local accounts through the admin interface.
 
 The authenticator works by checking for the authenticated username in the HTTP header ``"Cn"``.
 If found, and not blank, the client will be logged in as that user.
