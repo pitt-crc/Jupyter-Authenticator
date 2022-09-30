@@ -1,8 +1,9 @@
-# -*- coding: utf-8 -*-
+"""Configuration file for building application documentation"""
 
 # -- Path setup --------------------------------------------------------------
 
 import sys
+from datetime import date
 
 from pathlib import Path
 
@@ -13,11 +14,11 @@ sys.path.insert(0, str(project_root))
 
 # -- Project information -----------------------------------------------------
 
-from crc_jupyter_auth import __version__  # , __author__, __copyright__
+from crc_jupyter_auth import __version__, __author__
 
 project = u'CRC JupyterHub Authenticator'
-# copyright = __copyright__
-# author = __author__
+copyright = f'{date.today().year}, {__author__}'
+author = __author__
 release = __version__
 
 # -- General configuration ---------------------------------------------------
