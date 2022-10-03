@@ -29,7 +29,7 @@ def get_meta(value):
         value: The metadata variable to return a value for
     """
 
-    init_path = _file_dir / 'app' / '__init__.py'
+    init_path = _file_dir / 'crc_jupyter_auth' / '__init__.py'
     init_text = init_path.read_text()
 
     regex = re.compile(f"__{value}__ = '(.*?)'")
