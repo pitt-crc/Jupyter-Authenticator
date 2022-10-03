@@ -5,7 +5,7 @@ from pathlib import Path
 
 from setuptools import find_packages, setup
 
-PACKAGE_REQUIREMENTS = Path(__file__).parent / 'requirements.txt'
+_file_dir = Path(__file__).resolve().parent
 
 
 def get_long_description():
@@ -15,51 +15,43 @@ def get_long_description():
     return readme_file.read_text()
 
 
-def get_requirements(path):
+def get_requirements():
     """Return a list of package dependencies"""
 
-    with path.open() as req_file:
-        return req_file.read().splitlines()
+    requirements_file = _file_dir / 'requirements.txt'
+    return requirements_file.read_text().splitlines()
 
 
-def get_meta():
-    """Return package metadata including the:
-        - author
-        - version
-        - license
+def get_meta(value):
+    """Return package metadata as defined in the init file
+
+    Args:
+        value: The metadata variable to return a value for
     """
 
-    init_path = Path(__file__).resolve().parent / 'crc_jupyter_auth/__init__.py'
+    init_path = _file_dir / 'app' / '__init__.py'
     init_text = init_path.read_text()
 
-    version_regex = re.compile("__version__ = '(.*?)'")
-    version = version_regex.findall(init_text)[0]
-
-    author_regex = re.compile("__author__ = '(.*?)'")
-    author = author_regex.findall(init_text)[0]
-
-    license_regex = re.compile("__license__ = '(.*?)'")
-    license_type = license_regex.findall(init_text)[0]
-
-    return author, version, license_type
+    regex = re.compile(f"__{value}__ = '(.*?)'")
+    value = regex.findall(init_text)[0]
+    return value
 
 
-_author, _version, _license = get_meta()
 setup(
     name='crc_jupyter_auth',
     description='Jupyter authentication plugin that checks for account existence and VPN permissions.',
-    version=_version,
+    version=get_meta('version'),
     packages=find_packages(),
     python_requires='>=3.6',
-    install_requires=get_requirements(PACKAGE_REQUIREMENTS),
+    install_requires=get_requirements(),
     extras_require={
         'tests': ['coverage'],
     },
-    author=_author,
+    author=get_meta('author'),
     keywords='Pitt, CRC, HPC, wrappers',
     long_description=get_long_description(),
     long_description_content_type='text/markdown',
-    license=_license,
+    license=get_meta('license'),
     classifiers=[
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
