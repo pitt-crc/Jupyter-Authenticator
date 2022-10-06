@@ -28,7 +28,11 @@ class RemoteUserLoginHandler(BaseHandler):
      """
 
     def get(self):
-        """Parse an incoming ``get`` request and route users appropriately"""
+        """Parse an incoming ``get`` request and route users appropriately
+
+        Raises:
+            HTTPError: If a valid username cannot be found in the request data
+        """
 
         # Check for username in header information
         header_name = self.authenticator.header_name
@@ -115,8 +119,13 @@ class RemoteUserAuthenticator(AuthenticatorSettings, Authenticator):
         """Authenticate a user with login form data
 
         See parent class for requirements on implementing this method.
+
+        Raises:
+            NotImplementedError: Every time the method is called
         """
 
+        # User account authentication is expected to be handled upstream
+        # before the request reaches this class
         raise NotImplementedError()
 
 
@@ -149,6 +158,11 @@ class RemoteUserLocalAuthenticator(AuthenticatorSettings, LocalAuthenticator):
         """Authenticate a user with login form data
 
         See parent class for requirements on implementing this method.
+
+        Raises:
+            NotImplementedError: Every time the method is called
         """
 
+        # User account authentication is expected to be handled upstream
+        # before the request reaches this class
         raise NotImplementedError()
