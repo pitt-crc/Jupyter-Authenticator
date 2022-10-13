@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.2", ]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crc_jupyter_auth"
+dynamic = ["version"]
+requires-python = ">=3.6"
+authors = [{ name = "Pitt Center for Research Computing" }]
+license = "GNU GPL V3"
+readme = { file = "README.md", content-type = "text/markdown" }
+description = "Jupyter authentication plugin that checks for account existence and VPN permissions."
+keywords = ["Pitt", "CRC", "Jupyter", "JupyterHub", "JupyterLab", "Authentication"]
+classifiers = [
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3"
+]
+dependencies = [
+    "jupyterhub>=3.6"
+]
+
+[project.optional-dependencies]
+tests = ["coverage"]
+
+[tool.setuptools.dynamic]
+version = { attr = "apps.__version__" }
