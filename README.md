@@ -10,7 +10,7 @@ package originally created for more general applications.
 
 ## How It Works
 
-The authentication plugin checks HTTP header values from incoming authentication
+The authentication plugin checks HTTP header values for incoming authentication
 requests and routes users based on the associated header values. The name of the inspected
 headers and the routing destination are configurable via the standard Jupyter config file.
 
