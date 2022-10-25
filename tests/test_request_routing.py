@@ -63,7 +63,7 @@ class RequestRouting(TestCase):
 
         # Create an HTTP request with a blank username
         authenticator = RemoteUserAuthenticator()
-        request_handler = self.create_http_request_handler(authenticator, {authenticator.header_name: ''})
+        request_handler = self.create_http_request_handler(authenticator, {authenticator.username_header: ''})
 
         with self.assertRaises(web.HTTPError) as http_exception:
             request_handler.get()
@@ -72,42 +72,42 @@ class RequestRouting(TestCase):
 
     @patch.object(RemoteUserLoginHandler, 'redirect', return_value=None)
     def test_missing_vpn_role(self, mock_redirect_call: MagicMock) -> None:
-        """Test users are redirected to the ``vpn_redirect`` url for missing VPN roles"""
+        """Test users are redirected to the ``missing_role_redirect`` url for missing VPN roles"""
 
         # Create an HTTP request with a valid username but missing VPN information
         authenticator = RemoteUserAuthenticator()
-        request_handler = self.create_http_request_handler(authenticator, {authenticator.header_name: 'username'})
+        request_handler = self.create_http_request_handler(authenticator, {authenticator.username_header: 'username'})
         request_handler.get()
 
-        mock_redirect_call.assert_called_once_with(authenticator.vpn_redirect)
+        mock_redirect_call.assert_called_once_with(authenticator.missing_role_redirect)
 
     @patch.object(RemoteUserLoginHandler, 'redirect', return_value=None)
     def test_incorrect_vpn_role(self, mock_redirect_call: MagicMock) -> None:
-        """Test users are redirected to the ``vpn_redirect`` url for incorrect VPN roles"""
+        """Test users are redirected to the ``missing_role_redirect`` url for incorrect VPN roles"""
 
         # Create an HTTP request with a valid username and invalid VPN information
         authenticator = RemoteUserAuthenticator()
         header_data = {
-            authenticator.header_name: 'username',
-            authenticator.header_vpn: 'FAKEROLE1;FAKEROLE2'
+            authenticator.username_header: 'username',
+            authenticator.vpn_header: 'FAKEROLE1;FAKEROLE2'
         }
 
         request_handler = self.create_http_request_handler(authenticator, header_data)
         request_handler.get()
 
         # Make sure the user was redirected to the correct location
-        mock_redirect_call.assert_called_once_with(authenticator.vpn_redirect)
+        mock_redirect_call.assert_called_once_with(authenticator.missing_role_redirect)
 
     def test_blank_vpn_settings_404(self) -> None:
-        """Test a 404 is raised when ``vpn_redirect`` is configured to a blank string"""
+        """Test a 404 is raised when ``missing_role_redirect`` is configured to a blank string"""
 
         # Create an HTTP request with a valid username but missing VPN information
-        # This will cause a redirect to the ``vpn_redirect`` url
+        # This will cause a redirect to the ``missing_role_redirect`` url
         authenticator = RemoteUserAuthenticator()
-        request_handler = self.create_http_request_handler(authenticator, {authenticator.header_name: 'username'})
+        request_handler = self.create_http_request_handler(authenticator, {authenticator.username_header: 'username'})
 
-        # Modify the ``vpn_redirect`` url to be a blank string and process the request
-        request_handler.authenticator.vpn_redirect = ''
+        # Modify the ``missing_role_redirect`` url to be a blank string and process the request
+        request_handler.authenticator.missing_role_redirect = ''
         with self.assertRaises(web.HTTPError) as http_exception:
             request_handler.get()
 
@@ -116,32 +116,32 @@ class RequestRouting(TestCase):
     @patch('os.path.exists', lambda path: False)
     @patch.object(RemoteUserLoginHandler, 'redirect', return_value=None)
     def test_missing_home_dir_redirect(self, mock_redirect_call: MagicMock) -> None:
-        """Test users are redirected to the ``user_redirect`` url if they do not have a home directory"""
+        """Test users are redirected to the ``missing_user_redirect`` url if they do not have a home directory"""
 
         authenticator = RemoteUserAuthenticator()
         header_data = {
-            authenticator.header_name: 'username',
-            authenticator.header_vpn: authenticator.required_vpn_role
+            authenticator.username_header: 'username',
+            authenticator.vpn_header: authenticator.required_vpn_role
         }
 
         request_handler = self.create_http_request_handler(authenticator, header_data)
         request_handler.get()
 
-        mock_redirect_call.assert_called_once_with(authenticator.user_redirect)
+        mock_redirect_call.assert_called_once_with(authenticator.missing_user_redirect)
 
     @patch('os.path.exists', lambda path: False)
     def test_blank_home_dir_settings_404(self) -> None:
-        """Test a 404 is raised when ``user_redirect`` is configured to a blank string"""
+        """Test a 404 is raised when ``missing_user_redirect`` is configured to a blank string"""
 
         authenticator = RemoteUserAuthenticator()
         header_data = {
-            authenticator.header_name: 'username',
-            authenticator.header_vpn: authenticator.required_vpn_role
+            authenticator.username_header: 'username',
+            authenticator.vpn_header: authenticator.required_vpn_role
         }
 
-        # Modify the ``vpn_redirect`` url to be a blank string and process the request
+        # Modify the ``missing_role_redirect`` url to be a blank string and process the request
         request_handler = self.create_http_request_handler(authenticator, header_data)
-        request_handler.authenticator.user_redirect = ''
+        request_handler.authenticator.missing_user_redirect = ''
 
         with self.assertRaises(web.HTTPError) as http_exception:
             request_handler.get()
