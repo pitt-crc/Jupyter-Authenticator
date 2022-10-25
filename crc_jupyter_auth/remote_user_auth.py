@@ -44,7 +44,8 @@ class RemoteUserLoginHandler(BaseHandler):
         # Multiple roles are delimited by a semicolon
         header_vpn = self.authenticator.vpn_header
         remote_roles = self.request.headers.get(header_vpn, "").strip().split(';')
-        if self.authenticator.required_vpn_role not in remote_roles:
+        required_role = self.authenticator.required_vpn_role
+        if required_role and (required_role not in remote_roles):
             self.redirect_or_raise(self.authenticator.missing_role_redirect)
             return
 
@@ -96,17 +97,17 @@ class AuthenticatorSettings(HasTraits):
         help="HTTP header to inspect for user VPN role(s).")
 
     required_vpn_role = Unicode(
-        default_value='SAM-SSLVPNSAMUsers',
+        default_value='',
         config=True,
         help="Required VPN role for accessing the service.")
 
     missing_user_redirect = Unicode(
-        default_value='https://crc.pitt.edu/Access-CRC-Web-Portals',
+        default_value='',
         config=True,
         help="Url to redirect to if user has no home directory.")
 
     missing_role_redirect = Unicode(
-        default_value='https://crc.pitt.edu/Access-CRC-Web-Portals',
+        default_value='',
         config=True,
         help="Url to redirect to if user is missing necessary VPN role.")
 

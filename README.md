@@ -58,13 +58,13 @@ Otherwise, the user is redirected.
 The HTTP header names and failure redirects are configurable via the Jupyter settings file.
 Setting names and default values are provided in the table below:
 
-| Setting Name            | Default                | Description                                                                                |
-|-------------------------|------------------------|--------------------------------------------------------------------------------------------|
-| `username_header`       | `"Cn"`                 | HTTP header name to inspect for the authenticated username                                 |
-| `vpn_header`            | `"isMemberOf"`         | HTTP header name to inspect for the user VPN role(s).                                      |
-| `required_vpn_role`     | `"SAM-SSLVPNSAMUsers"` | Required VPN role for accessing the service.                                               |
-| `missing_user_redirect` | `""`                   | Url to redirect to if user has no home directory. Defaults to 404 if empty string.         |
-| `missing_role_redirect` | `""`                   | Url to redirect to if user is missing necessary VPN role. Defaults to 404 if empty string. |
+| Setting Name            | Default        | Description                                                                                |
+|-------------------------|----------------|--------------------------------------------------------------------------------------------|
+| `username_header`       | `"Cn"`         | HTTP header name to inspect for the authenticated username                                 |
+| `vpn_header`            | `"isMemberOf"` | HTTP header name to inspect for the user VPN role(s).                                      |
+| `required_vpn_role`     | `""`           | Required VPN role for accessing the service. Ignored if an empty string.                   |
+| `missing_user_redirect` | `""`           | Url to redirect to if user has no home directory. Defaults to 404 if empty string.         |
+| `missing_role_redirect` | `""`           | Url to redirect to if user is missing necessary VPN role. Defaults to 404 if empty string. |
 
 ## Architecture and Security Recommendations
 
