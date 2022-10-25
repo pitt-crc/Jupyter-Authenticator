@@ -71,7 +71,7 @@ c.Authenticator.missing_role_redirect = 'https://my.redirect.domain'
 ```
 
 If your system assigns multiple VPN roles to users and more than a single role is reported by the header
-defined by `vpn_header`, the VPN roles should be provided in the header as a semicolon delimited list
+`vpn_header`, the VPN roles should be provided in the header as a semicolon delimited list
 (e.g., `role1;role2`).
 
 ## Architecture and Security Recommendations
