@@ -67,7 +67,7 @@ To modify a settings value, use the `c.Authenticator` object in the configuratio
 For example:
 
 ```python
-c.Authenticator.missing_role_redirect = 'https://my.redirect.domain'
+c.Authenticator.missing_role_redirect = "https://my.redirect.domain"
 ```
 
 If your system assigns multiple VPN roles to users and more than a single role is reported by the header
