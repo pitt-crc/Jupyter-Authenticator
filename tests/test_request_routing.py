@@ -1,4 +1,5 @@
 """Test HTTP request routing by the ``RemoteUserLoginHandler`` class."""
+
 from typing import Type
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
@@ -145,36 +146,24 @@ class RoutingByVpnRole(TestUtils, TestCase):
 
 
 class RoutingByHomeDir(TestUtils, TestCase):
+    """Test users without a home directory are redirect to the URL configured in settings"""
+
     @patch('os.path.exists', lambda path: False)
     @patch.object(RemoteUserLoginHandler, 'redirect', return_value=None)
     def test_missing_home_dir_redirect(self, mock_redirect_call: MagicMock) -> None:
         """Test users are redirected to the ``missing_user_redirect`` URL if they do not have a home directory"""
 
-        authenticator = RemoteUserAuthenticator()
-        header_data = {
-            authenticator.username_header: 'username',
-            authenticator.vpn_header: authenticator.required_vpn_role
-        }
-
-        request_handler = self.create_http_request_handler(authenticator, header_data)
+        request_handler = self.create_http_request_handler({AuthenticatorSettings().username_header: 'username'})
+        request_handler.authenticator.missing_user_redirect = 'www.google.com'
         request_handler.get()
 
-        mock_redirect_call.assert_called_once_with(authenticator.missing_user_redirect)
+        mock_redirect_call.assert_called_once_with(request_handler.authenticator.missing_user_redirect)
 
     @patch('os.path.exists', lambda path: False)
-    def test_blank_home_dir_settings_404(self) -> None:
+    def test_missing_home_dir_redirect_404(self) -> None:
         """Test a 404 is raised when ``missing_user_redirect`` is configured to a blank string"""
 
-        authenticator = RemoteUserAuthenticator()
-        header_data = {
-            authenticator.username_header: 'username',
-            authenticator.vpn_header: authenticator.required_vpn_role
-        }
-
-        # Modify the ``missing_role_redirect`` URL to be a blank string and process the request
-        request_handler = self.create_http_request_handler(authenticator, header_data)
-        request_handler.authenticator.missing_user_redirect = ''
-
+        request_handler = self.create_http_request_handler({AuthenticatorSettings().username_header: 'username'})
         with self.assertRaises(web.HTTPError) as http_exception:
             request_handler.get()
 
