@@ -63,6 +63,13 @@ Setting names and default values are provided in the table below:
 | `missing_user_redirect` | `""`           | Url to redirect to if user has no home directory. Defaults to 404 if empty string.         |
 | `missing_role_redirect` | `""`           | Url to redirect to if user is missing necessary VPN role. Defaults to 404 if empty string. |
 
+To modify a settings value, use the `c.Authenticator` object in the configuration file.
+For example:
+
+```python
+c.Authenticator.missing_role_redirect = 'https://my.redirect.domain'
+```
+
 ## Architecture and Security Recommendations
 
 This authenticator relies on HTTP headers that can be spoofed by a malicious client.
