@@ -45,19 +45,37 @@ class RemoteUserLoginHandler(BaseHandler):
         header_vpn = self.authenticator.header_vpn
         remote_roles = self.request.headers.get(header_vpn, "").strip().split(';')
         if self.authenticator.required_vpn_role not in remote_roles:
-            self.redirect(self.authenticator.vpn_redirect)
+            self.redirect_or_raise(self.authenticator.vpn_redirect)
             return
 
         # Require the user has an existing home directory
         user_home_dir = os.path.expanduser('~{}'.format(remote_user))
         if not os.path.exists(user_home_dir):
-            self.redirect(self.authenticator.user_redirect)
+            self.redirect_or_raise(self.authenticator.user_redirect)
             return
 
         # Facilitate user authentication
         user = self.user_from_username(remote_user)
         self.set_login_cookie(user)
         self.redirect(url_path_join(self.hub.server.base_url, 'home'))
+
+    def redirect_or_raise(self, url, raise_status=404):
+        """Redirect to the given url
+
+        If the URL is None or empty, raise an ``HTTPError``
+
+        Args:
+            url: The url to redirect to
+            raise_status: Status code for the HTTP error
+
+        Raises:
+            HTTPError: If the ``url`` argument is ``False``
+        """
+
+        if not url:
+            raise web.HTTPError(raise_status)
+
+        self.redirect(url)
 
 
 class AuthenticatorSettings(HasTraits):
