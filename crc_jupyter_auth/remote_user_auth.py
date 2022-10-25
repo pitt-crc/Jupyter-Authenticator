@@ -35,23 +35,24 @@ class RemoteUserLoginHandler(BaseHandler):
         """
 
         # Check for username in header information
-        header_name = self.authenticator.header_name
+        header_name = self.authenticator.username_header
         remote_user = self.request.headers.get(header_name, "").lower().strip()
         if remote_user == "":
             raise web.HTTPError(401)
 
         # Check for necessary VPN role using request headers
         # Multiple roles are delimited by a semicolon
-        header_vpn = self.authenticator.header_vpn
+        header_vpn = self.authenticator.vpn_header
         remote_roles = self.request.headers.get(header_vpn, "").strip().split(';')
-        if self.authenticator.required_vpn_role not in remote_roles:
-            self.redirect_or_raise(self.authenticator.vpn_redirect)
+        required_role = self.authenticator.required_vpn_role
+        if required_role and (required_role not in remote_roles):
+            self.redirect_or_raise(self.authenticator.missing_role_redirect)
             return
 
         # Require the user has an existing home directory
         user_home_dir = os.path.expanduser('~{}'.format(remote_user))
         if not os.path.exists(user_home_dir):
-            self.redirect_or_raise(self.authenticator.user_redirect)
+            self.redirect_or_raise(self.authenticator.missing_user_redirect)
             return
 
         # Facilitate user authentication
@@ -85,28 +86,28 @@ class AuthenticatorSettings(HasTraits):
     deployment via the JupyterHub configuration file.
     """
 
-    header_name = Unicode(
+    username_header = Unicode(
         default_value='Cn',
         config=True,
         help="HTTP header to inspect for the authenticated username.")
 
-    header_vpn = Unicode(
+    vpn_header = Unicode(
         default_value='isMemberOf',
         config=True,
         help="HTTP header to inspect for user VPN role(s).")
 
     required_vpn_role = Unicode(
-        default_value='SAM-SSLVPNSAMUsers',
+        default_value='',
         config=True,
         help="Required VPN role for accessing the service.")
 
-    user_redirect = Unicode(
-        default_value='https://crc.pitt.edu/Access-CRC-Web-Portals',
+    missing_user_redirect = Unicode(
+        default_value='',
         config=True,
         help="Url to redirect to if user has no home directory.")
 
-    vpn_redirect = Unicode(
-        default_value='https://crc.pitt.edu/Access-CRC-Web-Portals',
+    missing_role_redirect = Unicode(
+        default_value='',
         config=True,
         help="Url to redirect to if user is missing necessary VPN role.")
 
