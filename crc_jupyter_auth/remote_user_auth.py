@@ -19,29 +19,28 @@ class RemoteUserLoginHandler(BaseHandler):
     """An HTTP request handler for incoming authentication attempts.
 
      HTTP requests are redirected by this handler based on the incoming
-     request header. Where incoming traffic is redirected is determined
-     by the JupyterHub configuration file. See the ``AuthenticatorSettings``
+     request header. The redirect destination is determined by the
+     JupyterHub configuration file. See the ``AuthenticatorSettings``
      class for default config values.
-
-     In all cases, if no username is given in the request header,
-     the request is redirected to a 401 error.
      """
 
     def get(self):
         """Parse an incoming ``get`` request and route users appropriately
 
         Raises:
-            HTTPError: If a valid username cannot be found in the request data
+            HTTPError: If a valid username cannot be found in the request
+            HTTPError: If the user is missing a required VPN role
+            HTTPError: If the user does not have an existing home directory
         """
 
-        # Check for username in header information
+        # Check for a username in the header information
         header_name = self.authenticator.username_header
         remote_user = self.request.headers.get(header_name, "").lower().strip()
         if remote_user == "":
             raise web.HTTPError(401)
 
-        # Check for necessary VPN role using request headers
-        # Multiple roles are delimited by a semicolon
+        # Check for a required VPN role using request headers
+        # Multiple roles are delimited in the request by a semicolon
         header_vpn = self.authenticator.vpn_header
         remote_roles = self.request.headers.get(header_vpn, "").strip().split(';')
         required_role = self.authenticator.required_vpn_role
@@ -49,7 +48,7 @@ class RemoteUserLoginHandler(BaseHandler):
             self.redirect_or_raise(self.authenticator.missing_role_redirect)
             return
 
-        # Require the user has an existing home directory
+        # Check if the user has an existing home directory
         user_home_dir = os.path.expanduser('~{}'.format(remote_user))
         if not os.path.exists(user_home_dir):
             self.redirect_or_raise(self.authenticator.missing_user_redirect)
@@ -104,16 +103,16 @@ class AuthenticatorSettings(HasTraits):
     missing_user_redirect = Unicode(
         default_value='',
         config=True,
-        help="Url to redirect to if user has no home directory.")
+        help="Url to redirect to if the user has no home directory.")
 
     missing_role_redirect = Unicode(
         default_value='',
         config=True,
-        help="Url to redirect to if user is missing necessary VPN role.")
+        help="Url to redirect to if the user is missing the required VPN role.")
 
 
 class RemoteUserAuthenticator(AuthenticatorSettings, Authenticator):
-    """A base class for implementing an authentication provider for JupyterHub
+    """Base class for implementing an authentication provider for JupyterHub.
 
     Handles the authentication of users and routes traffic from successfully
     authenticated users using the ``RemoteUserLoginHandler``.
@@ -126,7 +125,7 @@ class RemoteUserAuthenticator(AuthenticatorSettings, Authenticator):
             app: The JupyterHub application object, in case it needs to be accessed for info
 
         Returns:
-            A list of authentication handlers and the corresponding urls ``[('/url', Handler), ...]``
+            A list of authentication handlers and the corresponding urls: ``[('/url', Handler), ...]``
         """
 
         return [
@@ -137,7 +136,7 @@ class RemoteUserAuthenticator(AuthenticatorSettings, Authenticator):
     def authenticate(self, *args):
         """Authenticate a user with login form data
 
-        See parent class for requirements on implementing this method.
+        See the parent class for requirements on implementing this method.
 
         Raises:
             NotImplementedError: Every time the method is called
@@ -149,10 +148,10 @@ class RemoteUserAuthenticator(AuthenticatorSettings, Authenticator):
 
 
 class RemoteUserLocalAuthenticator(AuthenticatorSettings, LocalAuthenticator):
-    """Base class for Authenticators that works with local Linux/UNIX users
+    """Base class for authenticators that work with local Linux/UNIX users
 
-    This class is similar to the ``RemoteUserAuthenticator`` except it can
-    check for local user accounts and attempt to create them if they don't
+    This class is similar to the ``RemoteUserAuthenticator`` class except it 
+    can check for local user accounts and attempt to create them if they don't
     exist.
 
     Successfully authenticated users are routed using the ``RemoteUserLoginHandler``.
@@ -165,7 +164,7 @@ class RemoteUserLocalAuthenticator(AuthenticatorSettings, LocalAuthenticator):
             app: The JupyterHub application object, in case it needs to be accessed for info
 
         Returns:
-            A list of authentication handlers and the corresponding urls ``[('/url', Handler), ...]``
+            A list of authentication handlers and the corresponding urls: ``[('/url', Handler), ...]``
         """
 
         return [
@@ -176,7 +175,7 @@ class RemoteUserLocalAuthenticator(AuthenticatorSettings, LocalAuthenticator):
     def authenticate(self, *args):
         """Authenticate a user with login form data
 
-        See parent class for requirements on implementing this method.
+        See the parent class for requirements on implementing this method.
 
         Raises:
             NotImplementedError: Every time the method is called
