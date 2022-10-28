@@ -150,7 +150,7 @@ class RemoteUserAuthenticator(AuthenticatorSettings, Authenticator):
 class RemoteUserLocalAuthenticator(AuthenticatorSettings, LocalAuthenticator):
     """Base class for authenticators that work with local Linux/UNIX users
 
-    This class is similar to the ``RemoteUserAuthenticator`` class except it 
+    This class is similar to the ``RemoteUserAuthenticator`` class except it
     can check for local user accounts and attempt to create them if they don't
     exist.
 
