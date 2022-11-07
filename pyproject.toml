@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "crc_jupyter_auth"
 dynamic = ["version"]
-requires-python = ">=3.6"
+requires-python = ">=3.7"
 authors = [{ name = "Pitt Center for Research Computing" }]
 license = { file = "LICENCE.txt" }
 readme = { file = "README.md", content-type = "text/markdown" }
