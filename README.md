@@ -18,7 +18,7 @@ The name of the inspected headers and the routing destination are configurable v
 The `crc_jupyter_auth` package can be installable via the `pip` package manager.
 
 ```bash
-pip install git+https://github.com/pitt-crc/Jupyter-Authenticator.git
+pip install Jupyter-Authenticator
 ```
 
 After installing the package, you will need to update the `authenticator_class` option in your Jupyter configuration file.
