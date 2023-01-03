@@ -1,15 +1,17 @@
 [build-system]
-requires = ["setuptools>=61.2", ]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
-[project]
+[tool.poetry]
 name = "crc_jupyter_auth"
-dynamic = ["version"]
-requires-python = ">=3.7"
-authors = [{ name = "Pitt Center for Research Computing" }]
-license = { file = "LICENCE.txt" }
-readme = { file = "README.md", content-type = "text/markdown" }
-description = "Jupyter authentication plugin that checks for account existence and VPN permissions."
+version = "0.0.0"  # Version is set dynamically by the CI tool on publication
+authors = ["Pitt Center for Research Computing", ]
+license = "GPL-3.0-only"
+readme = "README.md"
+description = "Jupyter authentication plugin that checks for account existence and VPN roles."
+homepage = "https://github.com/pitt-crc/Jupyter-Authenticator"
+repository = "https://github.com/pitt-crc/Jupyter-Authenticator"
+documentation = "https://github.com/pitt-crc/Jupyter-Authenticator"
 keywords = ["Pitt", "CRC", "Jupyter", "JupyterHub", "JupyterLab", "Authentication"]
 classifiers = [
     "Intended Audience :: System Administrators",
@@ -22,14 +24,9 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
 ]
-dependencies = [
-    "jupyterhub",
-    "tornado",
-    "traitlets"
-]
 
-[project.optional-dependencies]
-tests = ["coverage"]
-
-[tool.setuptools.dynamic]
-version = { attr = "crc_jupyter_auth.__version__" }
+[tool.poetry.dependencies]
+python = ">=3.7"
+jupyterhub = "*"
+tornado = "*"
+traitlets = "*"
