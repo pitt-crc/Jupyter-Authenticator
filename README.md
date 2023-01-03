@@ -10,23 +10,15 @@ package originally created for more general applications.
 
 ## How It Works
 
-The authentication plugin checks HTTP header values from incoming authentication
-requests and routes users based on the associated header values. The name of the inspected
-headers and the routing destination are configurable via the standard Jupyter config file.
+The authentication plugin checks incoming authentication requests and routes users based on the associated header values.
+The name of the inspected headers and the routing destination are configurable via the standard Jupyter config file.
 
 ## Installation and Setup
 
-The latest development version of the `crc_jupyter_auth` package can be installable via the `pip` package manager.
+The `crc_jupyter_auth` package can be installable via the `pip` package manager.
 
 ```bash
 pip install git+https://github.com/pitt-crc/Jupyter-Authenticator.git
-```
-
-Specific release versions can be installed by specifying the github tag name.
-Replace `[TAGNAME]` with a release tag in the below example:
-
-```bash
-pip install git+https://github.com/pitt-crc/Jupyter-Authenticator.git@tags/[TAGNAME]
 ```
 
 After installing the package, you will need to update the `authenticator_class` option in your Jupyter configuration file.
@@ -82,5 +74,4 @@ of Jupyterhub. The JupyterHub daemon should **only** be accessible from the prox
 and **never** directly accessible by a client.
 
 The authenticating proxy should remove any HTTP headers from incoming
-requests and only apply the header to proxied requests
-that have been properly authenticated.
+requests and only apply headers to proxied requests that have been properly authenticated.
