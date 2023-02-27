@@ -63,6 +63,8 @@ jobs:
         include:
           - host: https://py00.crc.pitt.edu
             environment: publish-h2p
+          - host: https://upload.pypi.org/
+            environment: publish-pypi
 
     steps:
       - name: Download distribution from artifact storage
