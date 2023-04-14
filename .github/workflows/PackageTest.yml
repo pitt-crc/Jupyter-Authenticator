@@ -28,6 +28,7 @@ jobs:
 
       - name: Run tests with coverage
         run: |
+          asdf
           coverage run -m unittest discover 
           coverage report --omit="tests/*"
           coverage xml --omit="tests/*" -o report_${{ matrix.python-version }}.xml
