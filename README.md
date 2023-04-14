@@ -1,6 +1,6 @@
 # CRC JupyterHub Authenticator
-[![](https://app.codacy.com/project/badge/Grade/5e1a00bf8dbe4daf8275fc88ce748ea6)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pitt-crc/Jupyter-Authenticator&amp;utm_campaign=Badge_Grade)
-[![](https://app.codacy.com/project/badge/Coverage/5e1a00bf8dbe4daf8275fc88ce748ea6)](https://www.codacy.com/gh/pitt-crc/Jupyter-Authenticator/dashboard?utm_source=github.com&utm_medium=referral&utm_content=pitt-crc/Jupyter-Authenticator&utm_campaign=Badge_Coverage)
+[![](https://app.codacy.com/project/badge/Grade/5e1a00bf8dbe4daf8275fc88ce748ea6)](https://app.codacy.com/gh/pitt-crc/Jupyter-Authenticator/dashboard)
+[![](https://app.codacy.com/project/badge/Coverage/5e1a00bf8dbe4daf8275fc88ce748ea6)](https://app.codacy.com/gh/pitt-crc/Jupyter-Authenticator/dashboard)
 [![](https://github.com/pitt-crc/Jupyter-Authenticator/actions/workflows/PackageTest.yml/badge.svg)](https://github.com/pitt-crc/Jupyter-Authenticator/actions/workflows/PackageTest.yml)
 
 The `crc_jupyter_auth` package is a Jupyter authentication plugin for redirecting users based on their account status and VPN role.
@@ -35,7 +35,7 @@ c.JupyterHub.authenticator_class = "crc_jupyter_auth.RemoteUserLocalAuthenticato
 ```
 
 The `RemoteUserLocalAuthenticator` class provides the same authentication functionality
-as `RemoteUserAuthenticator` but is derived from Jupyter's builtin `LocalAuthenticator` class. 
+as `RemoteUserAuthenticator` but is derived from Jupyter's built-in `LocalAuthenticator` class. 
 This provides extra features such as the ability to add local accounts through the admin interface.
 
 ## Package Configuration
@@ -47,13 +47,13 @@ Otherwise, the user is redirected.
 The HTTP header names and failure redirects are configurable via the Jupyter settings file.
 Setting names and default values are provided in the table below:
 
-| Setting Name            | Default        | Description                                                                                |
-|-------------------------|----------------|--------------------------------------------------------------------------------------------|
-| `username_header`       | `"Cn"`         | HTTP header name to inspect for the authenticated username                                 |
-| `vpn_header`            | `"isMemberOf"` | HTTP header name to inspect for the user VPN role(s).                                      |
-| `required_vpn_role`     | `""`           | Required VPN role for accessing the service. Ignored if an empty string.                   |
-| `missing_user_redirect` | `""`           | Redirect URL if the user has no home directory. Defaults to 404 if empty string.           |
-| `missing_role_redirect` | `""`           | Redirect URL if the user is missing necessary VPN role. Defaults to 404 if empty string.   |
+| Setting Name            | Default        | Description                                                                                    |
+|-------------------------|----------------|------------------------------------------------------------------- -----------------------------|
+| `username_header`       | `"Cn"`         | HTTP header name to inspect for the authenticated username         -                            |
+| `vpn_header`            | `"isMemberOf"` | HTTP header name to inspect for the user VPN role(s).                                           |
+| `required_vpn_role`     | `""`           | Required VPN role for accessing the service. Ignored if an empty string.                        |
+| `missing_user_redirect` | `""`           | Redirect URL if the user has no home directory. Defaults to 404 if empty string.                |
+| `missing_role_redirect` | `""`           | Redirect URL if the user is missing the required VPN header. Defaults to 404 if empty string.   |
 
 To modify a settings value, use the `c.Authenticator` object in the configuration file.
 For example:
@@ -63,7 +63,7 @@ c.Authenticator.missing_role_redirect = "https://my.redirect.domain"
 ```
 
 If your system assigns multiple VPN roles to users and more than a single role is reported by the header
-`vpn_header`, the VPN roles should be provided in the header as a semicolon delimited list
+`vpn_header`, the VPN roles should be provided in the header as a semicolon-delimited list
 (e.g., `role1;role2`).
 
 ## Architecture and Security Recommendations
