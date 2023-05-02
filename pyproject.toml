@@ -30,3 +30,9 @@ python = ">=3.7"
 jupyterhub = "*"
 tornado = "*"
 traitlets = "*"
+
+[tool.poetry.group.tests]
+optional = true
+
+[tool.poetry.group.tests.dependencies]
+coverage = "*"
