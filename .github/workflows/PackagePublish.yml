@@ -10,25 +10,14 @@ permissions:
   id-token: write
 
 jobs:
-  run-tests:
+  test-package:
     name: Run Tests
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [ "3.7", "3.8", "3.9", "3.10", "3.11" ]
-
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v3
-
-      - name: Run Tests
-        uses: ./.github/actions/run-tests
-        with:
-          python-version: ${{ matrix.python-version }}
+    uses: ./.github/workflows/PackageTest.yml
+    secrets: inherit
 
   build-distribution:
     name: Build Source Distribution
-    needs: run-tests
+    needs: test-package
     runs-on: ubuntu-latest
 
     steps:
@@ -46,11 +35,11 @@ jobs:
           virtualenvs-create: false
 
       # Get the new package version from the release tag
-      # Git release tags are expected to start with "refs/tags/v"
+      # Release tags are expected to start with "refs/tags/v", so the first 11 characters are stripped
       - name: Set package version
         run: |
           tag=${{github.ref}}
-          poetry version "${tag#refs/tags/v}"
+          poetry version "${tag:11}"
 
       - name: Build package
         run: poetry build -v
@@ -87,7 +76,7 @@ jobs:
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          print-hash: true
+          verbose: true
           repository-url: ${{ matrix.host }}
           user: ${{ secrets.REPO_USER }}
           password: ${{ secrets.REPO_PASSWORD }}
