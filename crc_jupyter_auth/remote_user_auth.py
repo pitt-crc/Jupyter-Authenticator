@@ -144,7 +144,7 @@ class RemoteUserAuthenticator(AuthenticatorSettings, Authenticator):
 
         # User account authentication is expected to be handled upstream
         # before the request reaches this class
-        raise NotImplementedError()
+        raise NotImplementedError()  # pragma: no cover
 
 
 class RemoteUserLocalAuthenticator(AuthenticatorSettings, LocalAuthenticator):
@@ -183,4 +183,4 @@ class RemoteUserLocalAuthenticator(AuthenticatorSettings, LocalAuthenticator):
 
         # User account authentication is expected to be handled upstream
         # before the request reaches this class
-        raise NotImplementedError()
+        raise NotImplementedError()  # pragma: no cover
