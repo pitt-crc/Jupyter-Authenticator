@@ -10,15 +10,25 @@ permissions:
   id-token: write
 
 jobs:
-  test-package:
-    name: Run Tests
+  run-tests:
+    name: Tests
     uses: ./.github/workflows/PackageTest.yml
     secrets: inherit
 
-  build-distribution:
-    name: Build Source Distribution
-    needs: test-package
+  publish-package:
+    name: Publish Distribution
+    needs: run-tests
     runs-on: ubuntu-latest
+    environment: ${{ matrix.environment }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - host: https://py00.crc.pitt.edu
+            environment: publish-h2p
+          - host: https://upload.pypi.org/legacy/
+            environment: publish-pypi
 
     steps:
       - name: Checkout source
@@ -43,35 +53,6 @@ jobs:
 
       - name: Build package
         run: poetry build -v
-
-      - name: Upload distribution to artifact storage
-        uses: actions/upload-artifact@v3
-        with:
-          name: package-build
-          path: dist
-          retention-days: 7
-
-  publish-package:
-    name: Publish Distribution
-    needs: build-distribution
-    runs-on: ubuntu-latest
-    environment: ${{ matrix.environment }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - host: https://py00.crc.pitt.edu
-            environment: publish-h2p
-          - host: https://upload.pypi.org/legacy/
-            environment: publish-pypi
-
-    steps:
-      - name: Download distribution from artifact storage
-        uses: actions/download-artifact@v3
-        with:
-          name: package-build
-          path: dist
 
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@release/v1
