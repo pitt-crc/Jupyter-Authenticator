@@ -1,7 +1,7 @@
 # CRC JupyterHub Authenticator
 [![](https://app.codacy.com/project/badge/Grade/5e1a00bf8dbe4daf8275fc88ce748ea6)](https://app.codacy.com/gh/pitt-crc/Jupyter-Authenticator/dashboard)
 [![](https://app.codacy.com/project/badge/Coverage/5e1a00bf8dbe4daf8275fc88ce748ea6)](https://app.codacy.com/gh/pitt-crc/Jupyter-Authenticator/dashboard)
-[![](https://github.com/pitt-crc/Jupyter-Authenticator/actions/workflows/PackageTest.yml/badge.svg)](https://github.com/pitt-crc/Jupyter-Authenticator/actions/workflows/PackageTest.yml)
+[![](https://github.com/pitt-crc/Jupyter-Authenticator/actions/workflows/CodeQL.yml/badge.svg)](https://github.com/pitt-crc/Jupyter-Authenticator/actions/workflows/CodeQL.yml)
 
 The `crc_jupyter_auth` package is a Jupyter authentication plugin for redirecting users based on their account status and VPN role.
 The utility is based on the [jhub_remote_user_authenticator](https://github.com/cwaldbieser/jhub_remote_user_authenticator)
