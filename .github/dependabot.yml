@@ -1,15 +1,21 @@
 version: 2
 updates:
-  # Maintain dependencies for Python
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "monthly"
-    open-pull-requests-limit: 100
+    open-pull-requests-limit: 10
+    groups:
+      python-dependencies:
+        patterns:
+          - "*"
 
-  # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "monthly"
-    open-pull-requests-limit: 100
+    open-pull-requests-limit: 10
+    groups:
+      actions-dependencies:
+        patterns:
+          - "*"
