@@ -42,7 +42,7 @@ jobs:
           virtualenvs-create: false
 
       - name: Checkout source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Get the new package version from the release tag
       # Release tags are expected to start with "refs/tags/v", so the first 11 characters are stripped
