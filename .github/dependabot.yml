@@ -5,6 +5,12 @@ updates:
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 100
+    groups:
+      python-dependencies:
+        patterns:
+          - "*"
+    ignore:
+      - dependency-name: "sphinx-jsonschema"  # Newer versions of sphinx-jsonschema have compatibility issues
 
   - package-ecosystem: "github-actions"
     directory: "/"
