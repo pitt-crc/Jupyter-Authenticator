@@ -6,8 +6,6 @@ Module Contents
 ---------------
 """
 
-import os
-
 from jupyterhub.auth import Authenticator, LocalAuthenticator
 from jupyterhub.handlers import BaseHandler
 from jupyterhub.utils import url_path_join
