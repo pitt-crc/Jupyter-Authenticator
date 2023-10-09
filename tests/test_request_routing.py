@@ -1,11 +1,14 @@
 """Test HTTP request routing by the ``RemoteUserLoginHandler`` class."""
 
+from datetime import datetime
 from typing import Type
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
 from jupyterhub.auth import Authenticator
-from jupyterhub.objects import Server
+from jupyterhub.objects import Hub
+from jupyterhub.orm import User
+from jupyterhub.utils import new_token, url_path_join
 from tornado import web
 from tornado.httputil import HTTPConnection, HTTPHeaders, HTTPServerRequest
 from tornado.web import Application
@@ -37,7 +40,7 @@ class TestUtils:
         """
 
         # Create a tornado application running a jupyterhub server
-        application = Application(hub=Server(), authenticator=authenticator_type())
+        application = Application(hub=Hub(), authenticator=authenticator_type(), cookie_secret='secret')
 
         # HTTP connections are used by the application to write HTTP responses
         # The `set_close_callback` method is required to exist by JupyterHub
@@ -51,7 +54,7 @@ class TestUtils:
 
 
 class RoutingByUsername(TestUtils, TestCase):
-    """Test missing or invalid username information results in a HTTP 401 error"""
+    """Test missing or invalid username information results in an HTTP 401 error"""
 
     def test_missing_username_401(self) -> None:
         """Test for a 401 error when the username is missing from the HTTP header"""
@@ -143,3 +146,25 @@ class RoutingByVpnRole(TestUtils, TestCase):
         request_handler.get()
 
         mock_redirect_call.assert_called_once_with(request_handler.authenticator.missing_role_redirect)
+
+
+class SuccessfulLoginRouting(TestUtils, TestCase):
+    """Test the routing of users after a successful login"""
+
+    @staticmethod
+    def mock_user() -> User:
+        """Create a jupyterhub user object with mock/dummy data"""
+
+        return User(id=1, name='mock_user', admin=False, created=datetime.now(), cookie_id=new_token())
+
+    @patch.object(RemoteUserLoginHandler, 'redirect', return_value=None)
+    @patch.object(RemoteUserLoginHandler, 'user_from_username', return_value=mock_user())
+    def test_user_is_redirected(self, mock_user: User, mock_redirect_call: MagicMock) -> None:
+        """Test the user is redirected to the jupyterhub server"""
+
+        request_data = {AuthenticatorSettings().username_header: 'username'}
+        request_handler = self.create_http_request_handler(request_data)
+        request_handler.get()
+
+        expected_url = url_path_join(request_handler.hub.server.base_url, 'home')
+        mock_redirect_call.assert_called_once_with(expected_url)
