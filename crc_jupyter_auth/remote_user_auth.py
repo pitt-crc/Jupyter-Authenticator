@@ -6,8 +6,6 @@ Module Contents
 ---------------
 """
 
-import os
-
 from jupyterhub.auth import Authenticator, LocalAuthenticator
 from jupyterhub.handlers import BaseHandler
 from jupyterhub.utils import url_path_join
@@ -51,7 +49,7 @@ class RemoteUserLoginHandler(BaseHandler):
         # Facilitate user authentication
         user = self.user_from_username(remote_user)
         self.set_login_cookie(user)
-        self.redirect(url_path_join(self.hub.server.base_url, 'home'))
+        self.redirect_or_raise(url_path_join(self.hub.server.base_url, 'home'))
 
     def redirect_or_raise(self, url, raise_status=404):
         """Redirect to the given url
