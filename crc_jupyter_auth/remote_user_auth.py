@@ -22,7 +22,7 @@ class RemoteUserLoginHandler(BaseHandler):
      class for default config values.
      """
 
-    def get(self):
+    def get(self) -> None:
         """Parse an incoming ``get`` request and route users appropriately
 
         Raises:
@@ -51,7 +51,7 @@ class RemoteUserLoginHandler(BaseHandler):
         self.set_login_cookie(user)
         self.redirect_or_raise(url_path_join(self.hub.server.base_url, 'home'))
 
-    def redirect_or_raise(self, url, raise_status=404):
+    def redirect_or_raise(self, url: str, raise_status: int = 404) -> None:
         """Redirect to the given url
 
         If the URL is None or empty, raise an ``HTTPError``
@@ -105,7 +105,7 @@ class RemoteUserAuthenticator(AuthenticatorSettings, Authenticator):
     authenticated users using the ``RemoteUserLoginHandler``.
     """
 
-    def get_handlers(self, app):
+    def get_handlers(self, app: web.Application) -> list:
         """Return any custom handlers that need to be registered with the parent authenticator
 
         Args:
@@ -120,7 +120,7 @@ class RemoteUserAuthenticator(AuthenticatorSettings, Authenticator):
         ]
 
     @gen.coroutine
-    def authenticate(self, *args):
+    def authenticate(self, *args) -> None:
         """Authenticate a user with login form data
 
         See the parent class for requirements on implementing this method.
@@ -144,7 +144,7 @@ class RemoteUserLocalAuthenticator(AuthenticatorSettings, LocalAuthenticator):
     Successfully authenticated users are routed using the ``RemoteUserLoginHandler``.
     """
 
-    def get_handlers(self, app):
+    def get_handlers(self, app: web.Application) -> list:
         """Return any custom handlers that need to be registered with the parent authenticator
 
         Args:
@@ -159,7 +159,7 @@ class RemoteUserLocalAuthenticator(AuthenticatorSettings, LocalAuthenticator):
         ]
 
     @gen.coroutine
-    def authenticate(self, *args):
+    def authenticate(self, *args) -> None:
         """Authenticate a user with login form data
 
         See the parent class for requirements on implementing this method.
