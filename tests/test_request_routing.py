@@ -17,6 +17,16 @@ from crc_jupyter_auth import RemoteUserAuthenticator
 from crc_jupyter_auth.remote_user_auth import AuthenticatorSettings, RemoteUserLoginHandler
 
 
+def mock_user() -> User:
+    """Create a jupyterhub user object with mock/dummy data
+
+    Returns:
+        A partially instantiated User instance
+    """
+
+    return User(id=1, name='mock_user', admin=False, created=datetime.now(), cookie_id=new_token())
+
+
 class TestUtils:
     """Base class for general testing/setup utilities"""
 
@@ -150,12 +160,6 @@ class RoutingByVpnRole(TestUtils, TestCase):
 
 class SuccessfulLoginRouting(TestUtils, TestCase):
     """Test the routing of users after a successful login"""
-
-    @staticmethod
-    def mock_user() -> User:
-        """Create a jupyterhub user object with mock/dummy data"""
-
-        return User(id=1, name='mock_user', admin=False, created=datetime.now(), cookie_id=new_token())
 
     @patch.object(RemoteUserLoginHandler, 'redirect', return_value=None)
     @patch.object(RemoteUserLoginHandler, 'user_from_username', return_value=mock_user())
