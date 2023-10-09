@@ -143,28 +143,3 @@ class RoutingByVpnRole(TestUtils, TestCase):
         request_handler.get()
 
         mock_redirect_call.assert_called_once_with(request_handler.authenticator.missing_role_redirect)
-
-
-class RoutingByHomeDir(TestUtils, TestCase):
-    """Test users without a home directory are redirect to the URL configured in settings"""
-
-    @patch('os.path.exists', lambda path: False)
-    @patch.object(RemoteUserLoginHandler, 'redirect', return_value=None)
-    def test_missing_home_dir_redirect(self, mock_redirect_call: MagicMock) -> None:
-        """Test users are redirected to the ``missing_user_redirect`` URL if they do not have a home directory"""
-
-        request_handler = self.create_http_request_handler({AuthenticatorSettings().username_header: 'username'})
-        request_handler.authenticator.missing_user_redirect = 'www.google.com'
-        request_handler.get()
-
-        mock_redirect_call.assert_called_once_with(request_handler.authenticator.missing_user_redirect)
-
-    @patch('os.path.exists', lambda path: False)
-    def test_missing_home_dir_redirect_404(self) -> None:
-        """Test a 404 is raised when ``missing_user_redirect`` is configured to a blank string"""
-
-        request_handler = self.create_http_request_handler({AuthenticatorSettings().username_header: 'username'})
-        with self.assertRaises(web.HTTPError) as http_exception:
-            request_handler.get()
-
-        self.assertEqual(404, http_exception.exception.status_code)

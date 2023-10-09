@@ -48,12 +48,6 @@ class RemoteUserLoginHandler(BaseHandler):
             self.redirect_or_raise(self.authenticator.missing_role_redirect)
             return
 
-        # Check if the user has an existing home directory
-        user_home_dir = os.path.expanduser('~{}'.format(remote_user))
-        if not os.path.exists(user_home_dir):
-            self.redirect_or_raise(self.authenticator.missing_user_redirect)
-            return
-
         # Facilitate user authentication
         user = self.user_from_username(remote_user)
         self.set_login_cookie(user)
@@ -99,11 +93,6 @@ class AuthenticatorSettings(HasTraits):
         default_value='',
         config=True,
         help="Required VPN role for accessing the service.")
-
-    missing_user_redirect = Unicode(
-        default_value='',
-        config=True,
-        help="Url to redirect to if the user has no home directory.")
 
     missing_role_redirect = Unicode(
         default_value='',
