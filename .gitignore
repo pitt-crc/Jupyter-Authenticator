@@ -7,3 +7,6 @@ dist/
 
 # IDE files
 .idea/
+
+# Poetry files
+poetry.lock
